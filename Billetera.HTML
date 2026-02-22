@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billetera - Grupo Scout Nuestra Señora de la Paz</title>
+  <link rel="icon" type="image/png" href="img/logo.png" />
+
+  <!-- SDK de Supabase (desde CDN, sin instalar nada) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --verde: #16a34a;
+      --verde-oscuro: #065f46;
+      --gris-texto: #1e293b;
+      --gris-suave: #94a3b8;
+      --borde: #e2e8f0;
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", "Roboto", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(22,163,74,0.08) 0%, rgba(0,0,0,0) 60%),
+                  radial-gradient(circle at 80% 20%, rgba(59,130,246,0.07) 0%, rgba(0,0,0,0) 60%),
+                  var(--bg-body);
+      color: var(--gris-texto);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* ============================================
+       ANIMACIONES KEYFRAMES
+    ============================================ */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(28px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%       { transform: translateX(-8px); }
+      40%       { transform: translateX(8px); }
+      60%       { transform: translateX(-6px); }
+      80%       { transform: translateX(6px); }
+    }
+    @keyframes pulse-logo {
+      0%, 100% { box-shadow: 0 12px 24px rgba(22,163,74,0.28); }
+      50%       { box-shadow: 0 12px 32px rgba(22,163,74,0.55); }
+    }
+    @keyframes fadeSlideOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 0; transform: translateY(-20px) scale(0.97); }
+    }
+    @keyframes rowIn {
+      from { opacity: 0; transform: translateX(-16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes cellPop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ============================================
+       CARDS
+    ============================================ */
+    .login-card,
+    .billetera-card {
+      background: var(--bg-card);
+      border: 1px solid var(--borde);
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+      width: 100%;
+      max-width: 420px;
+      padding: 24px 24px 28px;
+      animation: fadeSlideUp .45s cubic-bezier(.22,.68,0,1.2) both;
+    }
+    .login-card.saliendo,
+    .billetera-card.saliendo {
+      animation: fadeSlideOut .3s ease forwards;
+      pointer-events: none;
+    }
+
+    /* ============================================
+       LOGIN
+    ============================================ */
+    .login-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .login-logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: #fff;
+      border: 2px solid var(--verde);
+      box-shadow: 0 12px 24px rgba(22,163,74,0.28);
+      object-fit: contain;
+      margin: 0 auto 12px;
+      padding: 4px;
+      display: block;
+      animation: pulse-logo 2.4s ease-in-out infinite;
+    }
+    .login-titulo {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gris-texto);
+      line-height: 1.3;
+    }
+    .login-sub {
+      font-size: .8rem;
+      color: var(--gris-suave);
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .form-label {
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--gris-texto);
+    }
+    .form-input {
+      font-family: inherit;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--borde);
+      padding: 12px 14px;
+      outline: none;
+      line-height: 1.4;
+      background: #fff;
+      color: var(--gris-texto);
+      transition: all .2s ease;
+    }
+    .form-input:focus {
+      border-color: rgba(22,163,74,.6);
+      box-shadow: 0 0 0 3px rgba(22,163,74,.25);
+    }
+    .form-input.error-shake {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220,38,38,.2);
+      animation: shake .4s ease;
+    }
+    .error-msg {
+      font-size: .8rem;
+      line-height: 1.3;
+      color: #dc2626;
+      min-height: 1em;
+    }
+    .btn-submit {
+      width: 100%;
+      background: var(--verde);
+      color: #fff;
+      font-weight: 600;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 20px 30px rgba(22,163,74,.4);
+      transition: background .15s ease, transform .1s ease, box-shadow .15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-submit:hover {
+      background: var(--verde-oscuro);
+      transform: translateY(-1px);
+      box-shadow: 0 24px 36px rgba(22,163,74,.45);
+    }
+    .btn-submit:active { transform: scale(.98); }
+    .btn-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: none;
+    }
+    .btn-submit.cargando .btn-spinner { display: block; }
+    .btn-submit.cargando .btn-texto   { opacity: .7; }
+    .nota-legal {
+      text-align: center;
+      font-size: .7rem;
+      color: var(--gris-suave);
+      line-height: 1.4;
+      margin-top: 16px;
+    }
+
+    /* ============================================
+       BILLETERA
+    ============================================ */
+    .billetera-card {
+      max-width: 1100px;
+      display: none;
+    }
+    .billetera-card.visible {
+      display: block;
+      animation: fadeSlideUp .5s cubic-bezier(.22,.68,0,1.2) both;
+    }
+    .billetera-head {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .billetera-titulo {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--gris-texto);
+      line-height: 1.2;
+    }
+    .billetera-nombre {
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--gris-suave);
+      margin-top: 4px;
+    }
+
+    /* ============================================
+       TABLA
+    ============================================ */
+    .tabla-scroll-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--gris-texto);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 800px;
+      font-size: .8rem;
+      text-align: center;
+      table-layout: fixed;
+    }
+    thead th {
+      border: 1px solid var(--gris-texto);
+      padding: 6px;
+      font-weight: 600;
+      background: #f9fafb;
+    }
+    tbody td {
+      border: 1px solid var(--gris-texto);
+      padding: 10px 6px;
+      font-weight: 500;
+      height: 40px;
+      vertical-align: middle;
+      background: #fff;
+      transition: background .2s ease;
+    }
+    tbody tr:nth-child(1) { animation: rowIn .4s .15s ease both; }
+    tbody tr:nth-child(2) { animation: rowIn .4s .28s ease both; }
+    tbody tr:nth-child(3) { animation: rowIn .4s .41s ease both; }
+    tbody td.row-title {
+      font-size: .8rem;
+      font-weight: 600;
+      background: #f9fafb;
+      width: 90px;
+      text-align: left;
+      padding-left: 8px;
+      white-space: nowrap;
+    }
+    td.has-value { animation: cellPop .35s ease; }
+    tbody td:not(.row-title):hover {
+      background: #f0fdf4;
+      cursor: default;
+    }
+    .tabla-nota {
+      font-size: .7rem;
+      line-height: 1.4;
+      color: var(--gris-suave);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    /* ============================================
+       BOTÓN VOLVER
+    ============================================ */
+    .volver-wrapper {
+      margin-top: 24px;
+      text-align: center;
+    }
+    .btn-volver {
+      appearance: none;
+      background: transparent;
+      border: 2px solid var(--verde);
+      color: var(--verde-oscuro);
+      font-weight: 600;
+      font-size: .9rem;
+      border-radius: 10px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .btn-volver:hover {
+      background: var(--verde);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .btn-volver:active { transform: scale(.97); }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 480px) {
+      .billetera-titulo { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="login-card" id="login-card">
+    <div class="login-header">
+      <img src="img/logo.png" class="login-logo" alt="Logo Grupo Scout" />
+      <div class="login-titulo">Billetera del Grupo Scout</div>
+      <div class="login-sub">Nuestra Señora de la Paz · Santo Tomé</div>
+    </div>
+    <form id="login-form">
+      <div class="form-field">
+        <label class="form-label" for="dni">Ingresá tu DNI</label>
+        <input id="dni" name="dni" class="form-input"
+               placeholder="Ej: 40123456" autocomplete="off" inputmode="numeric" />
+      </div>
+      <div class="error-msg" id="error-msg"></div>
+      <button type="submit" class="btn-submit" id="btn-ingresar">
+        <span class="btn-spinner"></span>
+        <span class="btn-texto">Ingresar</span>
+      </button>
+      <p class="nota-legal">
+        Uso interno del grupo.<br/>
+        Si no podés entrar, hablá con tu Jefe de Rama 🤝
+      </p>
+    </form>
+  </div>
+
+  <!-- BILLETERA -->
+  <div class="billetera-card" id="billetera-card">
+    <div class="billetera-head">
+      <div class="billetera-titulo" id="billetera-titulo">BILLETERA DE (NOMBRE)</div>
+      <div class="billetera-nombre" id="billetera-detalle">DNI: ----</div>
+    </div>
+    <div class="tabla-scroll-wrapper">
+      <table id="billetera-tabla">
+        <thead>
+          <tr>
+            <th></th>
+            <th>ENERO</th><th>FEBRER.</th><th>MARZO</th><th>ABRIL</th>
+            <th>MAYO</th><th>JUNIO</th><th>JULIO</th><th>AGOSTO</th>
+            <th>SEPTIEM.</th><th>OCTUB.</th><th>NOVIEM.</th><th>DICIEMBRE</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-title">ENTRADAS</td>
+            <td data-row="entradas" data-mes="enero"></td>
+            <td data-row="entradas" data-mes="febrero"></td>
+            <td data-row="entradas" data-mes="marzo"></td>
+            <td data-row="entradas" data-mes="abril"></td>
+            <td data-row="entradas" data-mes="mayo"></td>
+            <td data-row="entradas" data-mes="junio"></td>
+            <td data-row="entradas" data-mes="julio"></td>
+            <td data-row="entradas" data-mes="agosto"></td>
+            <td data-row="entradas" data-mes="septiembre"></td>
+            <td data-row="entradas" data-mes="octubre"></td>
+            <td data-row="entradas" data-mes="noviembre"></td>
+            <td data-row="entradas" data-mes="diciembre"></td>
+            <td data-row="entradas" data-mes="total" id="total-entradas"></td>
+          </tr>
+          <tr>
+            <td class="row-title">SALIDAS</td>
+            <td data-row="salidas" data-mes="enero"></td>
+            <td data-row="salidas" data-mes="febrero"></td>
+            <td data-row="salidas" data-mes="marzo"></td>
+            <td data-row="salidas" data-mes="abril"></td>
+            <td data-row="salidas" data-mes="mayo"></td>
+            <td data-row="salidas" data-mes="junio"></td>
+            <td data-row="salidas" data-mes="julio"></td>
+            <td data-row="salidas" data-mes="agosto"></td>
+            <td data-row="salidas" data-mes="septiembre"></td>
+            <td data-row="salidas" data-mes="octubre"></td>
+            <td data-row="salidas" data-mes="noviembre"></td>
+            <td data-row="salidas" data-mes="diciembre"></td>
+            <td data-row="salidas" data-mes="total" id="total-salidas"></td>
+          </tr>
+          <tr>
+            <td class="row-title">TOTAL</td>
+            <td data-row="total" data-mes="enero"></td>
+            <td data-row="total" data-mes="febrero"></td>
+            <td data-row="total" data-mes="marzo"></td>
+            <td data-row="total" data-mes="abril"></td>
+            <td data-row="total" data-mes="mayo"></td>
+            <td data-row="total" data-mes="junio"></td>
+            <td data-row="total" data-mes="julio"></td>
+            <td data-row="total" data-mes="agosto"></td>
+            <td data-row="total" data-mes="septiembre"></td>
+            <td data-row="total" data-mes="octubre"></td>
+            <td data-row="total" data-mes="noviembre"></td>
+            <td data-row="total" data-mes="diciembre"></td>
+            <td data-row="total" data-mes="total" id="total-neto"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tabla-nota">
+      * Entradas = plata que entró (cuotas, rifas vendidas, etc.)<br/>
+      * Salidas = plata gastada (inscripción campamento, remera, etc.)
+    </div>
+    <div class="volver-wrapper">
+      <button class="btn-volver" id="volver-btn">Salir</button>
+    </div>
+  </div>
+
+  <script>
+    // =====================================================
+    // 🔧 CONFIGURACIÓN — reemplazá con tus datos reales
+    //    Los encontrás en Supabase → Settings → API
+    // =====================================================
+    const SUPABASE_URL  = "https://wikzronmuohcirrqxeks.supabase.co";   // ← tu Project URL
+    const SUPABASE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indpa3pyb25tdW9oY2lycnF4ZWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3OTI0NTcsImV4cCI6MjA4NzM2ODQ1N30.AV9P0w4ZnRWmlo88C3ErSgh-o0E_x3u1jSMaROSk14k";        // ← tu anon public key
+
+    // Inicializamos el cliente de Supabase
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // =====================================================
+    // Referencias DOM
+    // =====================================================
+    const loginCard     = document.getElementById("login-card");
+    const billeteraCard = document.getElementById("billetera-card");
+    const loginForm     = document.getElementById("login-form");
+    const dniInput      = document.getElementById("dni");
+    const errorMsg      = document.getElementById("error-msg");
+    const tituloEl      = document.getElementById("billetera-titulo");
+    const detalleEl     = document.getElementById("billetera-detalle");
+    const volverBtn     = document.getElementById("volver-btn");
+    const btnIngresar   = document.getElementById("btn-ingresar");
+
+    const MESES = [
+      "enero","febrero","marzo","abril","mayo","junio",
+      "julio","agosto","septiembre","octubre","noviembre","diciembre"
+    ];
+
+    // =====================================================
+    // Llenar la tabla con los datos del scout
+    // =====================================================
+    function renderTabla(scout) {
+      let totalEntradas = 0;
+      let totalSalidas  = 0;
+
+      MESES.forEach((mes) => {
+        const entrada = scout[`entradas_${mes}`] || 0;
+        const salida  = scout[`salidas_${mes}`]  || 0;
+        const neto    = entrada - salida;
+
+        totalEntradas += entrada;
+        totalSalidas  += salida;
+
+        // Filas: entradas, salidas, total (neto por mes)
+        const celdas = {
+          entradas: billeteraCard.querySelector(`[data-row="entradas"][data-mes="${mes}"]`),
+          salidas:  billeteraCard.querySelector(`[data-row="salidas"][data-mes="${mes}"]`),
+          total:    billeteraCard.querySelector(`[data-row="total"][data-mes="${mes}"]`),
+        };
+
+        // Función helper para poner valor con animación
+        function poner(celda, valor) {
+          if (!celda) return;
+          celda.classList.remove("has-value");
+          void celda.offsetWidth;
+          if (valor === 0) {
+            celda.textContent = "";
+          } else {
+            celda.textContent = `$${valor.toLocaleString("es-AR")}`;
+            celda.classList.add("has-value");
+          }
+        }
+
+        poner(celdas.entradas, entrada);
+        poner(celdas.salidas,  salida);
+        poner(celdas.total,    neto);
+      });
+
+      // Totales anuales
+      const totalNeto = totalEntradas - totalSalidas;
+      function ponerTotal(celda, valor) {
+        if (!celda) return;
+        celda.textContent = `$${valor.toLocaleString("es-AR")}`;
+      }
+      ponerTotal(document.getElementById("total-entradas"), totalEntradas);
+      ponerTotal(document.getElementById("total-salidas"),  totalSalidas);
+      ponerTotal(document.getElementById("total-neto"),     totalNeto);
+    }
+
+    // =====================================================
+    // Animaciones de transición
+    // =====================================================
+    function mostrarBilletera(scout) {
+      loginCard.classList.add("saliendo");
+      setTimeout(() => {
+        loginCard.style.display = "none";
+        loginCard.classList.remove("saliendo");
+
+        tituloEl.textContent  = `BILLETERA DE ${scout.nombre.toUpperCase()}`;
+        detalleEl.textContent = `DNI: ${scout.dni}`;
+        renderTabla(scout);
+
+        billeteraCard.classList.add("visible");
+      }, 300);
+    }
+
+    function mostrarLogin() {
+      billeteraCard.classList.add("saliendo");
+      setTimeout(() => {
+        billeteraCard.classList.remove("visible", "saliendo");
+        loginCard.style.display = "block";
+        loginCard.style.animation = "none";
+        void loginCard.offsetWidth;
+        loginCard.style.animation = "";
+        dniInput.value = "";
+        errorMsg.textContent = "";
+        dniInput.focus();
+      }, 300);
+    }
+
+    // =====================================================
+    // Error con sacudida
+    // =====================================================
+    function mostrarError(msg) {
+      errorMsg.textContent = msg;
+      dniInput.classList.remove("error-shake");
+      void dniInput.offsetWidth;
+      dniInput.classList.add("error-shake");
+    }
+    dniInput.addEventListener("animationend", () => {
+      dniInput.classList.remove("error-shake");
+    });
+
+    // =====================================================
+    // LOGIN — consulta a Supabase
+    // =====================================================
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const dniValor = dniInput.value.trim();
+
+      if (!dniValor) {
+        mostrarError("Ingresá tu DNI.");
+        return;
+      }
+
+      // Activar spinner
+      btnIngresar.classList.add("cargando");
+      btnIngresar.disabled = true;
+      errorMsg.textContent = "";
+
+      try {
+        // Consulta a Supabase: buscamos el scout por DNI
+        const { data, error } = await db
+          .from("scouts")           // nombre de tu tabla
+          .select("*")             // traemos todas las columnas
+          .eq("dni", dniValor)     // donde dni = lo que escribió el usuario
+          .single();               // esperamos un solo resultado
+
+        if (error || !data) {
+          mostrarError("DNI no encontrado. Hablá con tu Jefe de Rama.");
+          return;
+        }
+
+        // ✅ Scout encontrado
+        mostrarBilletera(data);
+
+      } catch (err) {
+        mostrarError("Error de conexión. Intentá de nuevo.");
+        console.error(err);
+      } finally {
+        // Siempre quitamos el spinner
+        btnIngresar.classList.remove("cargando");
+        btnIngresar.disabled = false;
+      }
+    });
+
+    // =====================================================
+    // SALIR
+    // =====================================================
+    volverBtn.addEventListener("click", () => {
+      mostrarLogin();
+    });
+  </script>
+</body>
+</html>
