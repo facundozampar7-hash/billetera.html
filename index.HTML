@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grupo Scout Nuestra Señora de la Paz - Santo Tomé</title>
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="img/logo.png">
+
+  <style>
+    /* ===== RESET ===== */
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --verde: #16a34a;
+      --verde-oscuro: #065f46;
+      --texto-main: #022c22;
+      --texto-sec: #475569;
+      --borde-suave: #d1fae5;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", "Roboto", "Segoe UI", sans-serif;
+      color: var(--texto-main);
+      line-height: 1.4;
+      background:
+        radial-gradient(circle at top left, #bbf7d0 0, transparent 40%),
+        radial-gradient(circle at bottom right, #bbf7d0 0, transparent 45%),
+        #f0fdf4;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.2;
+      color: #fff;
+      background: rgba(2, 44, 34, 0.45);
+      backdrop-filter: blur(4px);
+      border-bottom: 1px solid rgba(209, 250, 229, 0.4);
+    }
+
+    .navbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .brand img {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      padding: 2px;
+      object-fit: contain;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-text span:first-child {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: #ecfdf3;
+    }
+
+    .brand-text span:last-child {
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 1.2;
+      color: #dcfce7;
+      opacity: 0.95;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: #ecfdf3;
+    }
+
+    .nav-links a {
+      color: #ecfdf3;
+      opacity: 0.9;
+      transition: opacity .15s;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-cta {
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: var(--verde);
+      color: #ecfdf3;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 1.2;
+      box-shadow: 0 10px 20px rgba(22,163,74,0.4);
+      border: 2px solid var(--verde);
+      transition: all .15s ease;
+      white-space: nowrap;
+    }
+    .nav-cta:hover {
+      background: #15803d;
+      border-color: #15803d;
+    }
+
+    .nav-cta-secondary {
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0);
+      color: #bbf7d0;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 1.2;
+      border: 2px solid #4ade80;
+      box-shadow: 0 10px 20px rgba(22,163,74,0.15);
+      transition: all .15s ease;
+      white-space: nowrap;
+    }
+    .nav-cta-secondary:hover {
+      background: #4ade80;
+      color: #064e3b;
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    /* ===== HERO FULLSCREEN ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80')
+        no-repeat center center / cover;
+      color: #fff;
+    }
+
+    .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);  /* solo oscurece sin poner verde */
+  backdrop-filter: blur(2px);
+}
+
+
+    .hero-content-wrapper {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 120px 24px 64px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-content-wrapper {
+        align-items: center;
+      }
+    }
+
+    .hero-left {
+      max-width: 640px;
+      color: #f9fafb;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15,118,110,0.4);
+      border: 1px solid rgba(209,250,229,0.7);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #ecfdf3;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+      margin-bottom: 16px;
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #bbf7d0;
+      box-shadow: 0 0 6px rgba(190,242,100,.9);
+    }
+
+    .hero-title {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #ecfdf3;
+    }
+
+    @media (min-width: 640px) {
+      .hero-title { font-size: 2.5rem; }
+    }
+
+    .accent {
+      color: #bbf7d0;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #e5f9ed;
+      margin-top: 16px;
+      max-width: 36rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+
+    .btn-primary {
+      background: var(--verde);
+      color: #ecfdf3;
+      box-shadow: 0 10px 20px rgba(22,163,74,0.5);
+    }
+
+    .btn-primary:hover { background: #15803d; }
+
+    .btn-outline-light {
+      background: rgba(236,253,245,0.95);
+      color: #064e3b;
+      border: 1px solid rgba(209,250,229,0.9);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    /* badge derecha */
+    .hero-badge {
+      background: rgba(236,253,245,0.96);
+      border: 1px solid rgba(209,250,229,0.9);
+      border-radius: 20px;
+      box-shadow:
+        0 40px 60px rgba(0,0,0,0.45),
+        0 4px 8px rgba(0,0,0,0.4);
+      padding: 16px;
+      width: 190px;
+      text-align: center;
+      color: #064e3b;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-badge img {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 8px;
+    }
+
+    .badge-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #022c22;
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+
+    .badge-sub {
+      font-size: 11px;
+      color: #047857;
+      margin-top: 8px;
+      line-height: 1.2;
+    }
+
+    .badge-motto {
+      font-size: 10px;
+      font-style: italic;
+      color: #16a34a;
+      margin-top: 12px;
+    }
+
+    /* ===== SECCIONES ===== */
+    .section {
+      padding: 64px 0;
+      color: var(--texto-main);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .narrow {
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #064e3b;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #166534;
+      letter-spacing: -0.02em;
+    }
+
+    .section-text {
+      color: #022c22;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .narrow p + p {
+      margin-top: 12px;
+    }
+
+    /* ACTIVIDADES */
+    .cards-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .act-card {
+      background: rgba(254, 254, 254, 0.96);
+      border-radius: 16px;
+      border: 1px solid rgba(22,163,74,0.2);
+      box-shadow: 0 20px 40px rgba(22,101,52,0.15);
+      padding: 20px;
+      min-width: 260px;
+      max-width: 340px;
+      flex: 1;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid transparent;
+      width: fit-content;
+    }
+
+    .tag-green {
+      background: rgba(22,163,74,0.15);
+      border-color: rgba(22,163,74,0.3);
+      color: var(--verde-oscuro);
+    }
+
+    .tag-blue {  /* la dejamos con otro verde para no romper clases */
+      background: rgba(34,197,94,0.16);
+      border-color: rgba(34,197,94,0.35);
+      color: #166534;
+    }
+
+    .tag-yellow {
+      background: rgba(190,242,100,0.25);
+      border-color: rgba(190,242,100,0.5);
+      color: #3f6212;
+    }
+
+    .act-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #022c22;
+      margin-top: 16px;
+      line-height: 1.3;
+      text-align: left;
+    }
+
+    .act-desc {
+      font-size: 14px;
+      color: #475569;
+      margin-top: 8px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    /* RAMAS */
+    .ramas-wrapper {
+      display: grid;
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    @media (min-width: 768px) {
+      .ramas-wrapper {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .rama-card {
+      background: rgba(254, 254, 254, 0.96);
+      border-radius: 16px;
+      border: 1px solid rgba(34,197,94,0.25);
+      box-shadow: 0 16px 30px rgba(22,101,52,0.16);
+      padding: 20px;
+      text-align: center;
+      min-width: 200px;
+    }
+
+    .rama-nombre {
+      font-size: 15px;
+      font-weight: 600;
+      color: #064e3b;
+      line-height: 1.3;
+    }
+
+    .rama-edad {
+      font-size: 13px;
+      font-weight: 500;
+      color: #166534;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .rama-desc {
+      font-size: 13px;
+      line-height: 1.4;
+      color: #475569;
+      margin-top: 8px;
+    }
+
+    /* CONTACTO + MAPA */
+    .contact-grid {
+      display: grid;
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    @media (min-width: 1024px) {
+      .contact-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+      }
+    }
+
+    .info-card {
+      background: rgba(254, 254, 254, 0.97);
+      border-radius: 16px;
+      border: 1px solid rgba(22,163,74,0.25);
+      box-shadow: 0 20px 40px rgba(22,101,52,0.18);
+      padding: 24px;
+      font-size: 14px;
+      color: var(--texto-main);
+      line-height: 1.5;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #064e3b;
+      margin-top: 16px;
+      line-height: 1.3;
+    }
+
+    .info-label:first-child {
+      margin-top: 0;
+    }
+
+    .info-value {
+      margin-top: 4px;
+      color: #475569;
+    }
+
+    .map-card {
+      background: rgba(254, 254, 254, 0.97);
+      border-radius: 16px;
+      border: 1px solid rgba(22,163,74,0.25);
+      box-shadow: 0 20px 40px rgba(22,101,52,0.18);
+      overflow: hidden;
+      min-height: 300px;
+    }
+
+    .map-card iframe {
+      border: 0;
+      width: 100%;
+      height: 300px;
+      display: block;
+    }
+
+    /* FORMULARIO */
+    .join-wrapper {
+      margin-top: 48px;
+      display: grid;
+      gap: 32px;
+    }
+
+    @media (min-width: 1024px) {
+      .join-wrapper {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .form-card {
+      background: rgba(254, 254, 254, 0.97);
+      border-radius: 16px;
+      border: 1px solid rgba(34,197,94,0.28);
+      box-shadow: 0 20px 40px rgba(22,101,52,0.18);
+      padding: 24px;
+    }
+
+    .form-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #064e3b;
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .form-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #166534;
+    }
+
+    .form-input {
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--texto-main);
+      font-size: 14px;
+      line-height: 1.4;
+      outline: none;
+      transition: all .15s ease;
+      font-family: inherit;
+      resize: none;
+      background: #ffffff;
+    }
+
+    .form-input:focus {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,.25);
+    }
+
+    .form-hint {
+      text-align: center;
+      color: #166534;
+      font-size: 11px;
+      line-height: 1.4;
+      margin-top: 12px;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #022c22;
+      color: #ecfdf3;
+      margin-top: 64px;
+    }
+
+    .footer-grid {
+      padding: 40px 24px;
+      display: grid;
+      gap: 32px;
+      font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: repeat(3,1fr); }
+    }
+
+    .footer-subheading {
+      font-weight: 600;
+      color: #bbf7d0;
+      margin-bottom: 12px;
+    }
+
+    .footer-links {
+      list-style: none;
+      line-height: 1.5;
+      padding-left: 0;
+    }
+
+    .footer-links a {
+      color: #a7f3d0;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: #ecfdf3;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(167,243,208,0.3);
+      color: #6ee7b7;
+      font-size: 11px;
+      text-align: center;
+      padding: 16px 0 24px;
+    }
+
+    .footer-quote {
+      font-size: 12px;
+      color: #a7f3d0;
+      margin-top: 8px;
+      line-height: 1.4;
+      max-width: 260px;
+    }
+
+    /* ===== COLORES POR SECCIÓN (SOLO VERDES) ===== */
+    #about {
+      background: linear-gradient(135deg, #ecfdf3, #dcfce7);
+    }
+
+    #actividades {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    }
+
+    #ramas {
+      background: linear-gradient(135deg, #bbf7d0, #a7f3d0);
+    }
+
+    #contacto {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    }
+
+    #sumate {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="brand">
+        <img src="img/logo.png" alt="Logo NSP">
+        <div class="brand-text">
+          <span>Grupo Scout</span>
+          <span>Ntra. Sra. de la Paz</span>
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <a href="#top">Inicio</a>
+        <a href="#about">Quiénes somos</a>
+        <a href="#actividades">Actividades</a>
+        <a href="#ramas">Ramas</a>
+        <a href="#contacto">Ubicación</a>
+        <a href="#sumate">Sumate</a>
+      </div>
+
+      <div class="nav-buttons">
+        <a class="nav-cta" href="#sumate">Quiero sumarme</a>
+        <a class="nav-cta-secondary" href="billetera.html" target="_blank">Billetera</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="top">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content-wrapper">
+      <div class="hero-left">
+        <div class="hero-pill">
+          <span class="pill-dot"></span>
+          <span>Grupo Scout Católico</span>
+          <span>• Santo Tomé</span>
+        </div>
+
+        <h1 class="hero-title">
+          Grupo Scout <span class="accent">“Nuestra Señora de la Paz”</span>
+        </h1>
+
+        <p class="hero-desc">
+          Formando personas responsables, solidarias y con fe. Vivimos el escultismo,
+          el servicio y el compromiso cristiano en la comunidad de Santo Tomé.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#sumate" class="btn btn-primary">Quiero sumarme</a>
+          <a href="#about" class="btn btn-outline-light">Conocer más</a>
+        </div>
+      </div>
+
+      <!-- Tarjeta con logo -->
+      <div class="hero-badge">
+        <img src="img/logo.png" alt="Logo Nuestra Señora de la Paz">
+        <p class="badge-title">Nuestra Señora<br>de la Paz</p>
+        <p class="badge-sub">Santo Tomé<br>Santa Fe</p>
+        <p class="badge-motto">"Siempre listos"</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- QUIÉNES SOMOS -->
+  <section id="about" class="section">
+    <div class="container narrow">
+      <h2 class="section-title">¿Quiénes somos?</h2>
+      <div class="section-subtitle">Fe, servicio, naturaleza y comunidad</div>
+
+      <p class="section-text">
+        Somos un grupo scout católico que acompaña el crecimiento de niños, adolescentes y jóvenes
+        a través del juego, la vida al aire libre, el servicio comunitario y la fe.
+      </p>
+      <p class="section-text">
+        Nuestra misión es educar para la vida: carácter, responsabilidad, trabajo en equipo y
+        espíritu solidario.
+      </p>
+      <p class="section-text">
+        Trabajamos por dejar el mundo un poco mejor de cómo lo encontramos.
+      </p>
+    </div>
+  </section>
+
+  <!-- ACTIVIDADES -->
+  <section id="actividades" class="section">
+    <div class="container narrow">
+      <h2 class="section-title">Lo que vivimos juntos</h2>
+      <div class="section-subtitle">El escultismo se aprende haciéndolo</div>
+
+      <div class="cards-flex">
+        <div class="act-card">
+          <div class="tag tag-green">Campamentos</div>
+          <p class="act-title">Vida al aire libre</p>
+          <p class="act-desc">Armado de carpa, fogón, cocina de patrulla, técnicas scout y convivencia en la naturaleza.</p>
+        </div>
+
+        <div class="act-card">
+          <div class="tag tag-blue">Servicio</div>
+          <p class="act-title">Ayudar donde hace falta</p>
+          <p class="act-desc">Acciones solidarias y compromiso cristiano con la comunidad de Santo Tomé.</p>
+        </div>
+
+        <div class="act-card">
+          <div class="tag tag-yellow">Fe</div>
+          <p class="act-title">Crecemos también en lo espiritual</p>
+          <p class="act-desc">Oración, misa y acompañamiento mariano bajo la advocación de Nuestra Señora de la Paz.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RAMAS / EDADES -->
+  <section id="ramas" class="section">
+    <div class="container narrow">
+      <h2 class="section-title">Nuestras ramas</h2>
+      <div class="section-subtitle">Cada edad vive el escultismo a su manera</div>
+
+      <div class="ramas-wrapper">
+        <div class="rama-card">
+          <div class="rama-nombre">Manada / Chispitas</div>
+          <div class="rama-edad">7 a 11 / 6 a 10 años</div>
+          <div class="rama-desc">Aprenden jugando, explorando y trabajando en equipo. Espíritu de manada.</div>
+        </div>
+
+        <div class="rama-card">
+          <div class="rama-nombre">Tropa / Comunidad Scout</div>
+          <div class="rama-edad">11 a 14 / 10 a 13 años</div>
+          <div class="rama-desc">Campamentos, desafíos, servicio. Empiezan a asumir responsabilidad personal.</div>
+        </div>
+
+        <div class="rama-card">
+          <div class="rama-nombre">Tropa / Comunidad Raiders</div>
+          <div class="rama-edad">14 a 17 / 13 a 16 años</div>
+          <div class="rama-desc">Proyecto personal, construcción comunitaria, primeras experiencias de liderazgo.</div>
+        </div>
+
+        <div class="rama-card">
+          <div class="rama-nombre">Clan / Comunidad Rovers</div>
+          <div class="rama-edad">17 a 21 / 16 a 21 años</div>
+          <div class="rama-desc">Servicio a la comunidad y acompañamiento a las otras ramas. Compromiso de vida.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UBICACIÓN / MAPA -->
+  <section id="contacto" class="section">
+    <div class="container narrow">
+      <h2 class="section-title">Dónde nos encontramos</h2>
+      <div class="section-subtitle">Te esperamos un sábado, vení a conocernos</div>
+
+      <div class="contact-grid">
+        <!-- Info -->
+        <div class="info-card">
+          <p class="info-label">Lugar</p>
+          <p class="info-value">Maletti 2165, S3016 Santo Tomé, Santa Fe</p>
+
+          <p class="info-label">Horario</p>
+          <p class="info-value">Sábados por la tarde</p>
+
+          <p class="info-label">Contacto</p>
+          <p class="info-value">WhatsApp del grupo: 342-432-1882</p>
+          <p class="info-value">Instagram: @grupo.scout_lapaz</p>
+          <p class="info-value">Mail: grupo@nsp.com</p>
+        </div>
+
+        <!-- Mapa -->
+        <div class="map-card">
+          <iframe
+            src="https://www.google.com/maps?q=-31.684938,-60.767486&z=19&output=embed"
+            loading="lazy"
+            allowfullscreen=""
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMULARIO DE CONTACTO / SUMATE -->
+  <section id="sumate" class="section">
+    <div class="container narrow">
+      <h2 class="section-title">¿Querés sumarte?</h2>
+      <div class="section-subtitle">Podés venir a probar una reunión sin compromiso</div>
+
+      <div class="join-wrapper">
+        <!-- Formulario -->
+        <form class="form-card">
+          <div class="form-title">Escribinos</div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label class="form-label">Nombre</label>
+              <input class="form-input" placeholder="Tu nombre" />
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">Edad del interesado</label>
+              <input class="form-input" placeholder="Ej: 12" />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Teléfono / WhatsApp</label>
+            <input class="form-input" placeholder="Ej: 342..." />
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Mensaje</label>
+            <textarea rows="4" class="form-input" placeholder="Quisiera averiguar para mi hijo / hija..."></textarea>
+          </div>
+
+          <button class="btn btn-primary full-width">Enviar consulta</button>
+          <p class="form-hint">Respondemos lo antes posible por WhatsApp</p>
+        </form>
+
+        <!-- Info rápida -->
+        <div class="info-card">
+          <p class="info-label">¿Quién puede sumarse?</p>
+          <p class="info-value">Niños, adolescentes y jóvenes. También estamos abiertos a familias que quieran acompañar.</p>
+
+          <p class="info-label">¿Necesito uniforme?</p>
+          <p class="info-value">No para la primera visita. Podés venir con ropa cómoda y ganas de participar 🙂</p>
+
+          <p class="info-label">Importante</p>
+          <p class="info-value">Somos un grupo de identidad católica. Compartimos espacios de fe y servicio comunitario.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid container">
+      <div>
+        <p style="font-weight:600;color:#bbf7d0;">Grupo Scout “Nuestra Señora de la Paz”</p>
+        <p>Santo Tomé, Santa Fe · Movimiento Scout Católico</p>
+        <p class="footer-quote">"Dejar el mundo un poco mejor de como lo encontramos"</p>
+      </div>
+
+      <div>
+        <p class="footer-subheading">Secciones</p>
+        <ul class="footer-links">
+          <li><a href="#about">Quiénes somos</a></li>
+          <li><a href="#actividades">Actividades</a></li>
+          <li><a href="#ramas">Ramas</a></li>
+          <li><a href="#contacto">Ubicación</a></li>
+          <li><a href="#sumate">Sumate</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-subheading">Contacto</p>
+        <ul class="footer-links">
+          <li>WhatsApp: 342-432-1882</li>
+          <li>IG: @grupo.scout_lapaz</li>
+          <li>Mail: grupo@nsp.com</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2025 Grupo Scout Nuestra Señora de la Paz · Santo Tomé
+    </div>
+  </footer>
+
+</body>
+</html>
