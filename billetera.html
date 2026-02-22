@@ -2,11 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Billetera - Grupo Scout Nuestra Señora de la Paz</title>
   <link rel="icon" type="image/png" href="img/logo.png" />
-
-  <!-- SDK de Supabase (desde CDN, sin instalar nada) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -34,14 +32,15 @@
                   var(--bg-body);
       color: var(--gris-texto);
       min-height: 100vh;
+      min-height: 100dvh; /* dynamic viewport para celulares */
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 16px;
     }
 
     /* ============================================
-       ANIMACIONES KEYFRAMES
+       ANIMACIONES
     ============================================ */
     @keyframes fadeSlideUp {
       from { opacity: 0; transform: translateY(28px) scale(0.98); }
@@ -68,7 +67,7 @@
     }
     @keyframes cellPop {
       0%   { transform: scale(1); }
-      50%  { transform: scale(1.15); }
+      50%  { transform: scale(1.12); }
       100% { transform: scale(1); }
     }
     @keyframes spin {
@@ -76,53 +75,47 @@
     }
 
     /* ============================================
-       CARDS
+       LOGIN CARD
     ============================================ */
-    .login-card,
-    .billetera-card {
+    .login-card {
       background: var(--bg-card);
       border: 1px solid var(--borde);
-      border-radius: 20px;
+      border-radius: 24px;
       box-shadow: 0 30px 80px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
       width: 100%;
-      max-width: 420px;
-      padding: 24px 24px 28px;
+      max-width: 400px;
+      padding: 32px 24px 28px;
       animation: fadeSlideUp .45s cubic-bezier(.22,.68,0,1.2) both;
     }
-    .login-card.saliendo,
-    .billetera-card.saliendo {
+    .login-card.saliendo {
       animation: fadeSlideOut .3s ease forwards;
       pointer-events: none;
     }
-
-    /* ============================================
-       LOGIN
-    ============================================ */
     .login-header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
     .login-logo {
-      width: 56px;
-      height: 56px;
-      border-radius: 12px;
+      width: 68px;
+      height: 68px;
+      border-radius: 16px;
       background: #fff;
       border: 2px solid var(--verde);
       box-shadow: 0 12px 24px rgba(22,163,74,0.28);
       object-fit: contain;
-      margin: 0 auto 12px;
-      padding: 4px;
+      margin: 0 auto 14px;
+      padding: 6px;
       display: block;
       animation: pulse-logo 2.4s ease-in-out infinite;
     }
     .login-titulo {
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: 1.1rem;
+      font-weight: 700;
       color: var(--gris-texto);
       line-height: 1.3;
     }
     .login-sub {
-      font-size: .8rem;
+      font-size: .85rem;
       color: var(--gris-suave);
       line-height: 1.4;
       margin-top: 4px;
@@ -134,63 +127,63 @@
       margin-bottom: 16px;
     }
     .form-label {
-      font-size: .9rem;
-      font-weight: 500;
+      font-size: .95rem;
+      font-weight: 600;
       color: var(--gris-texto);
     }
     .form-input {
       font-family: inherit;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: 1px solid var(--borde);
-      padding: 12px 14px;
+      font-size: 1.1rem; /* más grande para celular */
+      border-radius: 12px;
+      border: 1.5px solid var(--borde);
+      padding: 14px 16px;
       outline: none;
       line-height: 1.4;
       background: #fff;
       color: var(--gris-texto);
       transition: all .2s ease;
+      /* evita zoom en iOS al enfocar */
+      -webkit-text-size-adjust: 100%;
     }
     .form-input:focus {
       border-color: rgba(22,163,74,.6);
-      box-shadow: 0 0 0 3px rgba(22,163,74,.25);
+      box-shadow: 0 0 0 3px rgba(22,163,74,.2);
     }
     .form-input.error-shake {
       border-color: #dc2626;
-      box-shadow: 0 0 0 3px rgba(220,38,38,.2);
+      box-shadow: 0 0 0 3px rgba(220,38,38,.15);
       animation: shake .4s ease;
     }
     .error-msg {
-      font-size: .8rem;
+      font-size: .85rem;
       line-height: 1.3;
       color: #dc2626;
-      min-height: 1em;
+      min-height: 1.2em;
     }
     .btn-submit {
       width: 100%;
       background: var(--verde);
       color: #fff;
-      font-weight: 600;
+      font-weight: 700;
       border: 0;
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 1rem;
+      border-radius: 14px;
+      padding: 16px; /* más alto para el dedo */
+      font-size: 1.05rem;
       cursor: pointer;
-      box-shadow: 0 20px 30px rgba(22,163,74,.4);
-      transition: background .15s ease, transform .1s ease, box-shadow .15s ease;
+      box-shadow: 0 16px 28px rgba(22,163,74,.38);
+      transition: background .15s ease, transform .1s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      /* área táctil mínima recomendada */
+      min-height: 52px;
+      touch-action: manipulation;
     }
-    .btn-submit:hover {
-      background: var(--verde-oscuro);
-      transform: translateY(-1px);
-      box-shadow: 0 24px 36px rgba(22,163,74,.45);
-    }
-    .btn-submit:active { transform: scale(.98); }
+    .btn-submit:active { transform: scale(.97); background: var(--verde-oscuro); }
     .btn-spinner {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       border: 2px solid rgba(255,255,255,.4);
       border-top-color: #fff;
       border-radius: 50%;
@@ -201,101 +194,182 @@
     .btn-submit.cargando .btn-texto   { opacity: .7; }
     .nota-legal {
       text-align: center;
-      font-size: .7rem;
+      font-size: .75rem;
       color: var(--gris-suave);
-      line-height: 1.4;
-      margin-top: 16px;
+      line-height: 1.5;
+      margin-top: 18px;
     }
 
     /* ============================================
-       BILLETERA
+       BILLETERA CARD
     ============================================ */
     .billetera-card {
+      background: var(--bg-card);
+      border: 1px solid var(--borde);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.05);
+      width: 100%;
       max-width: 1100px;
+      padding: 20px 16px 24px;
       display: none;
     }
     .billetera-card.visible {
       display: block;
       animation: fadeSlideUp .5s cubic-bezier(.22,.68,0,1.2) both;
     }
+    .billetera-card.saliendo {
+      animation: fadeSlideOut .3s ease forwards;
+      pointer-events: none;
+    }
+
+    /* Header billetera */
     .billetera-head {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--borde);
     }
     .billetera-titulo {
-      font-size: 1.8rem;
-      font-weight: 600;
+      font-size: 1.3rem;
+      font-weight: 700;
       color: var(--gris-texto);
       line-height: 1.2;
     }
     .billetera-nombre {
-      font-size: .9rem;
+      font-size: .85rem;
       font-weight: 500;
       color: var(--gris-suave);
       margin-top: 4px;
     }
 
+    /* Badge saldo */
+    .saldo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--verde-oscuro);
+    }
+    .saldo-badge.negativo {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+    .saldo-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--verde);
+    }
+    .saldo-badge.negativo .saldo-dot {
+      background: #dc2626;
+    }
+
     /* ============================================
-       TABLA
+       TABLA — scroll horizontal en mobile
     ============================================ */
     .tabla-scroll-wrapper {
       overflow-x: auto;
       border-radius: 12px;
-      border: 1px solid var(--gris-texto);
+      border: 1px solid #cbd5e1;
+      /* scroll suave en iOS */
+      -webkit-overflow-scrolling: touch;
+      /* indicador visual de scroll */
+      scroll-snap-type: x proximity;
     }
+
+    /* Hint de scroll solo en mobile */
+    .scroll-hint {
+      display: none;
+      text-align: center;
+      font-size: .72rem;
+      color: var(--gris-suave);
+      margin-bottom: 6px;
+    }
+
     table {
       border-collapse: collapse;
       width: 100%;
-      min-width: 800px;
-      font-size: .8rem;
+      min-width: 720px;
+      font-size: .78rem;
       text-align: center;
       table-layout: fixed;
     }
     thead th {
-      border: 1px solid var(--gris-texto);
-      padding: 6px;
-      font-weight: 600;
-      background: #f9fafb;
+      border: 1px solid #cbd5e1;
+      padding: 8px 4px;
+      font-weight: 700;
+      background: #f1f5f9;
+      font-size: .72rem;
+      letter-spacing: .02em;
+      color: #475569;
     }
+    thead th:first-child {
+      background: #e2e8f0;
+    }
+    /* Columna TOTAL destacada */
+    thead th:last-child,
+    tbody td:last-child {
+      background: #f0fdf4 !important;
+      font-weight: 700;
+      border-left: 2px solid #86efac !important;
+    }
+
     tbody td {
-      border: 1px solid var(--gris-texto);
-      padding: 10px 6px;
+      border: 1px solid #cbd5e1;
+      padding: 10px 4px;
       font-weight: 500;
-      height: 40px;
+      height: 42px;
       vertical-align: middle;
       background: #fff;
-      transition: background .2s ease;
+      transition: background .15s ease;
     }
     tbody tr:nth-child(1) { animation: rowIn .4s .15s ease both; }
     tbody tr:nth-child(2) { animation: rowIn .4s .28s ease both; }
     tbody tr:nth-child(3) { animation: rowIn .4s .41s ease both; }
+
+    /* Fila TOTAL (tercera fila) */
+    tbody tr:nth-child(3) td {
+      background: #f8fafc;
+      font-weight: 700;
+      border-top: 2px solid #94a3b8;
+    }
+
     tbody td.row-title {
-      font-size: .8rem;
-      font-weight: 600;
-      background: #f9fafb;
-      width: 90px;
+      font-size: .75rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      width: 80px;
       text-align: left;
       padding-left: 8px;
       white-space: nowrap;
+      color: #334155;
+      letter-spacing: .03em;
     }
-    td.has-value { animation: cellPop .35s ease; }
+    td.has-value { animation: cellPop .3s ease; }
     tbody td:not(.row-title):hover {
       background: #f0fdf4;
-      cursor: default;
     }
+
     .tabla-nota {
       font-size: .7rem;
-      line-height: 1.4;
+      line-height: 1.5;
       color: var(--gris-suave);
       text-align: center;
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
     /* ============================================
-       BOTÓN VOLVER
+       BOTÓN SALIR
     ============================================ */
     .volver-wrapper {
-      margin-top: 24px;
+      margin-top: 20px;
       text-align: center;
     }
     .btn-volver {
@@ -303,25 +377,88 @@
       background: transparent;
       border: 2px solid var(--verde);
       color: var(--verde-oscuro);
-      font-weight: 600;
-      font-size: .9rem;
-      border-radius: 10px;
-      padding: 10px 16px;
+      font-weight: 700;
+      font-size: .95rem;
+      border-radius: 12px;
+      padding: 12px 28px;
       cursor: pointer;
       transition: all .15s ease;
+      min-height: 48px;
+      touch-action: manipulation;
     }
-    .btn-volver:hover {
+    .btn-volver:active {
       background: var(--verde);
       color: #fff;
-      transform: translateY(-1px);
+      transform: scale(.97);
     }
-    .btn-volver:active { transform: scale(.97); }
 
     /* ============================================
-       RESPONSIVE
+       RESPONSIVE — mejoras para celular
     ============================================ */
-    @media (max-width: 480px) {
-      .billetera-titulo { font-size: 1.4rem; }
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+        align-items: flex-start;
+        padding-top: 24px;
+      }
+
+      .login-card {
+        border-radius: 20px;
+        padding: 28px 20px 24px;
+      }
+
+      .billetera-card {
+        border-radius: 20px;
+        padding: 16px 12px 20px;
+      }
+
+      .billetera-titulo {
+        font-size: 1.1rem;
+      }
+
+      /* Mostrar hint de scroll en mobile */
+      .scroll-hint {
+        display: block;
+      }
+
+      /* Tabla más compacta en mobile */
+      table {
+        font-size: .7rem;
+        min-width: 600px;
+      }
+      thead th {
+        padding: 6px 2px;
+        font-size: .65rem;
+      }
+      tbody td {
+        padding: 8px 2px;
+        height: 38px;
+      }
+      tbody td.row-title {
+        width: 68px;
+        font-size: .68rem;
+        padding-left: 5px;
+      }
+
+      .btn-submit {
+        padding: 16px;
+        font-size: 1rem;
+      }
+
+      .btn-volver {
+        width: 100%;
+        text-align: center;
+      }
+
+      .saldo-badge {
+        font-size: .8rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      table { min-width: 520px; }
+      thead th { font-size: .6rem; }
+      tbody td.row-title { width: 60px; font-size: .62rem; }
     }
   </style>
 </head>
@@ -337,8 +474,13 @@
     <form id="login-form">
       <div class="form-field">
         <label class="form-label" for="dni">Ingresá tu DNI</label>
-        <input id="dni" name="dni" class="form-input"
-               placeholder="Ej: 40123456" autocomplete="off" inputmode="numeric" />
+        <input
+          id="dni" name="dni" class="form-input"
+          placeholder="Ej: 40123456"
+          autocomplete="off"
+          inputmode="numeric"
+          pattern="[0-9]*"
+        />
       </div>
       <div class="error-msg" id="error-msg"></div>
       <button type="submit" class="btn-submit" id="btn-ingresar">
@@ -357,15 +499,22 @@
     <div class="billetera-head">
       <div class="billetera-titulo" id="billetera-titulo">BILLETERA DE (NOMBRE)</div>
       <div class="billetera-nombre" id="billetera-detalle">DNI: ----</div>
+      <div class="saldo-badge" id="saldo-badge">
+        <span class="saldo-dot"></span>
+        <span id="saldo-texto">Saldo: $0</span>
+      </div>
     </div>
+
+    <div class="scroll-hint">← deslizá para ver todos los meses →</div>
+
     <div class="tabla-scroll-wrapper">
       <table id="billetera-tabla">
         <thead>
           <tr>
             <th></th>
-            <th>ENERO</th><th>FEBRER.</th><th>MARZO</th><th>ABRIL</th>
-            <th>MAYO</th><th>JUNIO</th><th>JULIO</th><th>AGOSTO</th>
-            <th>SEPTIEM.</th><th>OCTUB.</th><th>NOVIEM.</th><th>DICIEMBRE</th>
+            <th>ENE</th><th>FEB</th><th>MAR</th><th>ABR</th>
+            <th>MAY</th><th>JUN</th><th>JUL</th><th>AGO</th>
+            <th>SEP</th><th>OCT</th><th>NOV</th><th>DIC</th>
             <th>TOTAL</th>
           </tr>
         </thead>
@@ -421,6 +570,7 @@
         </tbody>
       </table>
     </div>
+
     <div class="tabla-nota">
       * Entradas = plata que entró (cuotas, rifas vendidas, etc.)<br/>
       * Salidas = plata gastada (inscripción campamento, remera, etc.)
@@ -433,18 +583,14 @@
   <script>
     // =====================================================
     // 🔧 CONFIGURACIÓN — reemplazá con tus datos reales
-    //    Los encontrás en Supabase → Settings → API
     // =====================================================
-    const SUPABASE_URL  = "https://wikzronmuohcirrqxeks.supabase.co";   // ← tu Project URL
-    const SUPABASE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indpa3pyb25tdW9oY2lycnF4ZWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3OTI0NTcsImV4cCI6MjA4NzM2ODQ1N30.AV9P0w4ZnRWmlo88C3ErSgh-o0E_x3u1jSMaROSk14k";        // ← tu anon public key
+    const SUPABASE_URL = "https://XXXXXXXXXXXXXXXX.supabase.co";
+    const SUPABASE_KEY = "eyJXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
-    // Inicializamos el cliente de Supabase
     const { createClient } = supabase;
     const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // =====================================================
     // Referencias DOM
-    // =====================================================
     const loginCard     = document.getElementById("login-card");
     const billeteraCard = document.getElementById("billetera-card");
     const loginForm     = document.getElementById("login-form");
@@ -452,6 +598,8 @@
     const errorMsg      = document.getElementById("error-msg");
     const tituloEl      = document.getElementById("billetera-titulo");
     const detalleEl     = document.getElementById("billetera-detalle");
+    const saldoBadge    = document.getElementById("saldo-badge");
+    const saldoTexto    = document.getElementById("saldo-texto");
     const volverBtn     = document.getElementById("volver-btn");
     const btnIngresar   = document.getElementById("btn-ingresar");
 
@@ -460,9 +608,7 @@
       "julio","agosto","septiembre","octubre","noviembre","diciembre"
     ];
 
-    // =====================================================
-    // Llenar la tabla con los datos del scout
-    // =====================================================
+    // Llenar tabla
     function renderTabla(scout) {
       let totalEntradas = 0;
       let totalSalidas  = 0;
@@ -471,18 +617,15 @@
         const entrada = scout[`entradas_${mes}`] || 0;
         const salida  = scout[`salidas_${mes}`]  || 0;
         const neto    = entrada - salida;
-
         totalEntradas += entrada;
         totalSalidas  += salida;
 
-        // Filas: entradas, salidas, total (neto por mes)
         const celdas = {
           entradas: billeteraCard.querySelector(`[data-row="entradas"][data-mes="${mes}"]`),
           salidas:  billeteraCard.querySelector(`[data-row="salidas"][data-mes="${mes}"]`),
           total:    billeteraCard.querySelector(`[data-row="total"][data-mes="${mes}"]`),
         };
 
-        // Función helper para poner valor con animación
         function poner(celda, valor) {
           if (!celda) return;
           celda.classList.remove("has-value");
@@ -502,6 +645,7 @@
 
       // Totales anuales
       const totalNeto = totalEntradas - totalSalidas;
+
       function ponerTotal(celda, valor) {
         if (!celda) return;
         celda.textContent = `$${valor.toLocaleString("es-AR")}`;
@@ -509,22 +653,28 @@
       ponerTotal(document.getElementById("total-entradas"), totalEntradas);
       ponerTotal(document.getElementById("total-salidas"),  totalSalidas);
       ponerTotal(document.getElementById("total-neto"),     totalNeto);
+
+      // Badge de saldo
+      saldoTexto.textContent = `Saldo: $${totalNeto.toLocaleString("es-AR")}`;
+      if (totalNeto < 0) {
+        saldoBadge.classList.add("negativo");
+      } else {
+        saldoBadge.classList.remove("negativo");
+      }
     }
 
-    // =====================================================
-    // Animaciones de transición
-    // =====================================================
+    // Transiciones
     function mostrarBilletera(scout) {
       loginCard.classList.add("saliendo");
       setTimeout(() => {
         loginCard.style.display = "none";
         loginCard.classList.remove("saliendo");
-
         tituloEl.textContent  = `BILLETERA DE ${scout.nombre.toUpperCase()}`;
         detalleEl.textContent = `DNI: ${scout.dni}`;
         renderTabla(scout);
-
         billeteraCard.classList.add("visible");
+        // scroll al inicio
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }, 300);
     }
 
@@ -539,12 +689,11 @@
         dniInput.value = "";
         errorMsg.textContent = "";
         dniInput.focus();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }, 300);
     }
 
-    // =====================================================
     // Error con sacudida
-    // =====================================================
     function mostrarError(msg) {
       errorMsg.textContent = msg;
       dniInput.classList.remove("error-shake");
@@ -555,9 +704,7 @@
       dniInput.classList.remove("error-shake");
     });
 
-    // =====================================================
-    // LOGIN — consulta a Supabase
-    // =====================================================
+    // Login
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const dniValor = dniInput.value.trim();
@@ -567,40 +714,34 @@
         return;
       }
 
-      // Activar spinner
       btnIngresar.classList.add("cargando");
       btnIngresar.disabled = true;
       errorMsg.textContent = "";
 
       try {
-        // Consulta a Supabase: buscamos el scout por DNI
         const { data, error } = await db
-          .from("scouts")           // nombre de tu tabla
-          .select("*")             // traemos todas las columnas
-          .eq("dni", dniValor)     // donde dni = lo que escribió el usuario
-          .single();               // esperamos un solo resultado
+          .from("scouts")
+          .select("*")
+          .eq("dni", dniValor)
+          .single();
 
         if (error || !data) {
           mostrarError("DNI no encontrado. Hablá con tu Jefe de Rama.");
           return;
         }
 
-        // ✅ Scout encontrado
         mostrarBilletera(data);
 
       } catch (err) {
         mostrarError("Error de conexión. Intentá de nuevo.");
         console.error(err);
       } finally {
-        // Siempre quitamos el spinner
         btnIngresar.classList.remove("cargando");
         btnIngresar.disabled = false;
       }
     });
 
-    // =====================================================
-    // SALIR
-    // =====================================================
+    // Salir
     volverBtn.addEventListener("click", () => {
       mostrarLogin();
     });
