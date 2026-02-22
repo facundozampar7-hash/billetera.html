@@ -882,7 +882,7 @@
           <p class="info-label">Contacto</p>
           <p class="info-value">WhatsApp del grupo: 342-432-1882</p>
           <p class="info-value">Instagram: @grupo.scout_lapaz</p>
-          <p class="info-value">Mail: grupo@nsp.com</p>
+          <p class="info-value">Mail: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="deb9acabaeb19eb0adaef0bdb1b3">[email&#160;protected]</a></p>
         </div>
 
         <!-- Mapa -->
@@ -906,34 +906,36 @@
 
       <div class="join-wrapper">
         <!-- Formulario -->
-        <form class="form-card">
+        <div class="form-card">
           <div class="form-title">Escribinos</div>
 
           <div class="form-row">
             <div class="form-field">
               <label class="form-label">Nombre</label>
-              <input class="form-input" placeholder="Tu nombre" />
+              <input class="form-input" id="form-nombre" placeholder="Tu nombre" />
             </div>
 
             <div class="form-field">
               <label class="form-label">Edad del interesado</label>
-              <input class="form-input" placeholder="Ej: 12" />
+              <input class="form-input" id="form-edad" placeholder="Ej: 12" />
             </div>
           </div>
 
           <div class="form-field">
             <label class="form-label">Teléfono / WhatsApp</label>
-            <input class="form-input" placeholder="Ej: 342..." />
+            <input class="form-input" id="form-telefono" placeholder="Ej: 342..." />
           </div>
 
           <div class="form-field">
             <label class="form-label">Mensaje</label>
-            <textarea rows="4" class="form-input" placeholder="Quisiera averiguar para mi hijo / hija..."></textarea>
+            <textarea rows="4" class="form-input" id="form-mensaje" placeholder="Quisiera averiguar para mi hijo / hija..."></textarea>
           </div>
 
-          <button class="btn btn-primary full-width">Enviar consulta</button>
+          <div id="form-error" style="color:#dc2626;font-size:.85rem;min-height:1.2em;margin-bottom:4px;"></div>
+
+          <button class="btn btn-primary full-width" onclick="enviarWhatsApp()">Enviar consulta</button>
           <p class="form-hint">Respondemos lo antes posible por WhatsApp</p>
-        </form>
+        </div>
 
         <!-- Info rápida -->
         <div class="info-card">
@@ -975,15 +977,41 @@
         <ul class="footer-links">
           <li>WhatsApp: 342-432-1882</li>
           <li>IG: @grupo.scout_lapaz</li>
-          <li>Mail: grupo@nsp.com</li>
+          <li>Mail: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="abccd9de"></a></li>
         </ul>
       </div>
     </div>
-
-    <div class="footer-bottom">
-      © 2025 Grupo Scout Nuestra Señora de la Paz · Santo Tomé
-    </div>
   </footer>
 
+  <script>
+    function enviarWhatsApp() {
+      const nombre   = document.getElementById("form-nombre").value.trim();
+      const edad     = document.getElementById("form-edad").value.trim();
+      const telefono = document.getElementById("form-telefono").value.trim();
+      const mensaje  = document.getElementById("form-mensaje").value.trim();
+      const errorEl  = document.getElementById("form-error");
+
+      if (!nombre || !telefono) {
+        errorEl.textContent = "Por favor completá tu nombre y teléfono.";
+        return;
+      }
+      errorEl.textContent = "";
+
+      const texto = `¡Hola! Me comunico desde la página web del Grupo Scout 👋
+
+*Nombre:* ${nombre}
+*Edad del interesado:* ${edad || "No especificada"}
+*Teléfono:* ${telefono}
+*Mensaje:* ${mensaje || "Sin mensaje adicional"}`;
+
+      const url = `https://wa.me/543424321882?text=${encodeURIComponent(texto)}`;
+      window.open(url, "_blank");
+
+      document.getElementById("form-nombre").value   = "";
+      document.getElementById("form-edad").value     = "";
+      document.getElementById("form-telefono").value = "";
+      document.getElementById("form-mensaje").value  = "";
+    }
+  </script>
 </body>
 </html>
