@@ -501,18 +501,18 @@
       for (const i of mesesConDatos) {
         const v = seguroPorMes[i];
         const cls = seguroPagado ? 'seguro-ok' : 'seguro-deuda';
-        trSeg += `<td class="${cls}">${v > 0 ? fmt(v) : ''}</td>`;
+        trSeg += `<td class="${cls}">${v > 0 ? (seguroPagado ? fmt(0) : fmt(v)) : ''}</td>`;
       }
       const clsSeguro = seguroPagado ? 'seguro-ok' : 'seguro-deuda';
       trSeg += `<td class="col-total ${clsSeguro}">${fmt(montoSeguro)}</td>`;
       trSeg += `</tr>`;
 
-      // ── FILA TOTAL (entradas - salidas - seguro) ─────
-      const totalFinal = totalNeto - deudaSeguro;
+      // ── FILA TOTAL (entradas - salidas, sin seguro) ──
+      const totalFinal = totalNeto;
       let trTot = `<tr class="fila-total">`;
       trTot += `<td class="row-title">TOTAL</td>`;
       for (const i of mesesConDatos) {
-        const v = netoMes[i] - seguroPorMes[i];
+        const v = netoMes[i];
         const cls = v < 0 ? ' style="color:#dc2626"' : (v > 0 ? ' style="color:#16a34a"' : '');
         trTot += `<td${cls}>${v !== 0 ? fmt(v) : ''}</td>`;
       }
