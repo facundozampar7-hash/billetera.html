@@ -178,10 +178,24 @@
       min-height: 100vh;
       display: flex;
       align-items: center;
-      background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80')
-        no-repeat center center / cover;
       color: #fff;
+      overflow: hidden;
     }
+
+    .foto-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .foto-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.8s ease;
+    }
+    .foto-slide.activa { opacity: 1; }
 
     .hero-overlay {
   position: absolute;
@@ -193,6 +207,7 @@
 
     .hero-content-wrapper {
       position: relative;
+      z-index: 2;
       max-width: 1200px;
       margin: 0 auto;
       width: 100%;
@@ -747,6 +762,19 @@
 
   <!-- HERO -->
   <header class="hero" id="top">
+    <div class="foto-bg">
+      <div class="foto-slide activa" style="background-image: url('img/foto1.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto2.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto3.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto4.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto5.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto6.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto7.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto8.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto9.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto10.jpg')"></div>
+      <div class="foto-slide" style="background-image: url('img/foto11.jpg')"></div>
+    </div>
     <div class="hero-overlay"></div>
 
     <div class="hero-content-wrapper">
@@ -845,13 +873,13 @@
 
         <div class="rama-card">
           <div class="rama-nombre">Tropa / Comunidad Scout</div>
-          <div class="rama-edad">11 a 14 / 10 a 13 años</div>
+          <div class="rama-edad">11 a 13 / 10 a 12 años</div>
           <div class="rama-desc">Campamentos, desafíos, servicio. Empiezan a asumir responsabilidad personal.</div>
         </div>
 
         <div class="rama-card">
           <div class="rama-nombre">Tropa / Comunidad Raiders</div>
-          <div class="rama-edad">14 a 17 / 13 a 16 años</div>
+          <div class="rama-edad">14 a 16 / 13 a 15 años</div>
           <div class="rama-desc">Proyecto personal, construcción comunitaria, primeras experiencias de liderazgo.</div>
         </div>
 
@@ -984,6 +1012,19 @@
   </footer>
 
   <script>
+    // Fondo rotante de fotos — funciona con cualquier cantidad
+    const slides = document.querySelectorAll(".foto-slide");
+    let actualSlide = 0;
+
+    // Forzamos que solo la primera esté activa al inicio
+    slides.forEach((s, i) => s.classList.toggle("activa", i === 0));
+
+    setInterval(() => {
+      slides[actualSlide].classList.remove("activa");
+      actualSlide = (actualSlide + 1) % slides.length;
+      slides[actualSlide].classList.add("activa");
+    }, 4000);
+
     function enviarWhatsApp() {
       const nombre   = document.getElementById("form-nombre").value.trim();
       const edad     = document.getElementById("form-edad").value.trim();
