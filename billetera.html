@@ -198,6 +198,15 @@
     }
     thead th:first-child { background: #e2e8f0; }
 
+    thead th.col-saldo-ini-header {
+      background: #fefce8 !important;
+      border-right: 2px solid #fde68a !important;
+      color: #713f12;
+      font-size: .7rem;
+      line-height: 1.4;
+      text-align: center;
+    }
+
     /* Columna TOTAL SALDO */
     thead th.col-total,
     tbody td.col-total {
@@ -333,7 +342,6 @@
         <span class="info-pill">DNI: <strong id="info-dni">—</strong></span>
         <span class="info-pill">FdN: <strong id="info-fdn">—</strong></span>
         <span class="info-pill">Grupo: <strong id="info-grupo">—</strong></span>
-        <span class="info-pill">Saldo inicial: <strong id="info-saldo-ini">$0,00</strong></span>
       </div>
       <div class="saldo-badge" id="saldo-badge">
         <span class="saldo-dot"></span>
@@ -399,7 +407,6 @@
     const infoGrupo     = document.getElementById("info-grupo");
     const saldoBadge    = document.getElementById("saldo-badge");
     const saldoTexto    = document.getElementById("saldo-texto");
-    const infoSaldoIni  = document.getElementById("info-saldo-ini");
     const volverBtn     = document.getElementById("volver-btn");
     const btnIngresar   = document.getElementById("btn-ingresar");
     const theadRow      = document.getElementById("thead-row");
@@ -420,46 +427,47 @@
       theadRow.innerHTML = "";
       tbody.innerHTML    = "";
 
-      // ── ENCABEZADO ──────────────────────────────────
-      // Columna vacía (nombre de fila)
-      theadRow.innerHTML += `<th></th>`;
-      // Solo meses hasta el actual (inclusive)
-      for (let i = 0; i <= MES_ACTUAL; i++) {
-        theadRow.innerHTML += `<th>${MESES_CORTO[i]}</th>`;
-      }
-      // Total saldo
-      theadRow.innerHTML += `<th class="col-total">TOTAL SALDO</th>`;
-
       // ── CALCULAR VALORES ────────────────────────────
       const saldoInicial = Number(scout.saldo_inicial) || 0;
-      let totalEntradas  = saldoInicial; // El saldo inicial suma a entradas
+      let totalEntradas  = saldoInicial;
       let totalSalidas   = 0;
 
       // Arrays de valores por mes (solo hasta mes actual)
       const entradasMes = [];
       const salidasMes  = [];
       const netoMes     = [];
+      const mesesConDatos = []; // solo índices de meses con algún valor
 
       for (let i = 0; i <= MES_ACTUAL; i++) {
         const mes     = MESES[i];
         const entrada = Number(scout[`entradas_${mes}`]) || 0;
         const salida  = Number(scout[`salidas_${mes}`])  || 0;
+        const seguro  = Number(configSeguro[`seguro_${mes}`]) || 0;
         entradasMes.push(entrada);
         salidasMes.push(salida);
         netoMes.push(entrada - salida);
         totalEntradas += entrada;
         totalSalidas  += salida;
+        if (entrada > 0 || salida > 0 || seguro > 0) {
+          mesesConDatos.push(i);
+        }
       }
 
       const totalNeto = totalEntradas - totalSalidas;
 
-      // Mostrar saldo inicial en el pill del header
-      infoSaldoIni.textContent = fmt(saldoInicial);
+      // ── ENCABEZADO ──────────────────────────────────
+      theadRow.innerHTML += `<th class="col-saldo-ini-header">Saldo inicial:<br>${fmt(saldoInicial)}</th>`;
+      // Solo meses con datos
+      for (const i of mesesConDatos) {
+        theadRow.innerHTML += `<th>${MESES_CORTO[i]}</th>`;
+      }
+      // Total saldo
+      theadRow.innerHTML += `<th class="col-total">TOTAL SALDO</th>`;
 
       // ── FILA ENTRADAS ────────────────────────────────
       let trEnt = `<tr>`;
       trEnt += `<td class="row-title">ENTRADAS</td>`;
-      for (let i = 0; i <= MES_ACTUAL; i++) {
+      for (const i of mesesConDatos) {
         const v = entradasMes[i];
         trEnt += `<td${v > 0 ? ' class="has-value"' : ''}>${v > 0 ? fmt(v) : ''}</td>`;
       }
@@ -469,51 +477,54 @@
       // ── FILA SALIDAS ─────────────────────────────────
       let trSal = `<tr>`;
       trSal += `<td class="row-title">SALIDAS</td>`;
-      for (let i = 0; i <= MES_ACTUAL; i++) {
+      for (const i of mesesConDatos) {
         const v = salidasMes[i];
         trSal += `<td${v > 0 ? ' class="has-value"' : ''}>${v > 0 ? fmt(v) : ''}</td>`;
       }
       trSal += `<td class="col-total"></td>`;
       trSal += `</tr>`;
 
-      // ── FILA TOTAL ───────────────────────────────────
-      let trTot = `<tr class="fila-total">`;
-      trTot += `<td class="row-title">TOTAL</td>`;
-      for (let i = 0; i <= MES_ACTUAL; i++) {
-        const v = netoMes[i];
-        const cls = v < 0 ? ' style="color:#dc2626"' : (v > 0 ? ' style="color:#16a34a"' : '');
-        trTot += `<td${cls}>${v !== 0 ? fmt(v) : ''}</td>`;
-      }
-      trTot += `<td class="col-total" style="color:${totalNeto >= 0 ? '#16a34a' : '#dc2626'}">${fmt(totalNeto)}</td>`;
-      trTot += `</tr>`;
-
       // ── FILA PAGO DE SEGURO ──────────────────────────
-      // Calcular deuda: suma del seguro de cada mes hasta el actual
       let deudaSeguro = 0;
+      const seguroPorMes = [];
       for (let i = 0; i <= MES_ACTUAL; i++) {
         const clave = `seguro_${MESES[i]}`;
-        deudaSeguro += Number(configSeguro[clave]) || 0;
+        const v = Number(configSeguro[clave]) || 0;
+        seguroPorMes.push(v);
+        deudaSeguro += v;
       }
       const seguroPagado = scout.seguro_pagado === true;
       const montoSeguro  = seguroPagado ? 0 : deudaSeguro;
 
       let trSeg = `<tr class="fila-seguro">`;
       trSeg += `<td class="row-title">PAGO DE SEGURO</td>`;
-      // Celdas de meses vacías para el seguro
-      for (let i = 0; i <= MES_ACTUAL; i++) {
-        trSeg += `<td></td>`;
+      for (const i of mesesConDatos) {
+        const v = seguroPorMes[i];
+        const cls = seguroPagado ? 'seguro-ok' : 'seguro-deuda';
+        trSeg += `<td class="${cls}">${v > 0 ? fmt(v) : ''}</td>`;
       }
-      // Total seguro
       const clsSeguro = seguroPagado ? 'seguro-ok' : 'seguro-deuda';
       trSeg += `<td class="col-total ${clsSeguro}">${fmt(montoSeguro)}</td>`;
       trSeg += `</tr>`;
 
+      // ── FILA TOTAL (entradas - salidas - seguro) ─────
+      const totalFinal = totalNeto - deudaSeguro;
+      let trTot = `<tr class="fila-total">`;
+      trTot += `<td class="row-title">TOTAL</td>`;
+      for (const i of mesesConDatos) {
+        const v = netoMes[i] - seguroPorMes[i];
+        const cls = v < 0 ? ' style="color:#dc2626"' : (v > 0 ? ' style="color:#16a34a"' : '');
+        trTot += `<td${cls}>${v !== 0 ? fmt(v) : ''}</td>`;
+      }
+      trTot += `<td class="col-total" style="color:${totalFinal >= 0 ? '#16a34a' : '#dc2626'}">${fmt(totalFinal)}</td>`;
+      trTot += `</tr>`;
+
       // Insertar filas
-      tbody.innerHTML = trEnt + trSal + trTot + trSeg;
+      tbody.innerHTML = trEnt + trSal + trSeg + trTot;
 
       // ── BADGE SALDO ──────────────────────────────────
-      saldoTexto.textContent = `Saldo total: ${fmt(totalNeto)}`;
-      saldoBadge.classList.toggle("negativo", totalNeto < 0);
+      saldoTexto.textContent = `Saldo total: ${fmt(totalFinal)}`;
+      saldoBadge.classList.toggle("negativo", totalFinal < 0);
     }
 
     // =====================================================
@@ -529,7 +540,6 @@
         infoDni.textContent     = scout.dni;
         infoFdn.textContent     = scout.fecha_nacimiento || "—";
         infoGrupo.textContent   = scout.grupo || "—";
-        infoSaldoIni.textContent = fmt(Number(scout.saldo_inicial) || 0);
 
         construirTabla(scout, configSeguro);
 
