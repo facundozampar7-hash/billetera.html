@@ -18,12 +18,7 @@
       --bg-card: #ffffff;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-font-smoothing: antialiased;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", "Roboto", "Segoe UI", sans-serif;
@@ -32,7 +27,7 @@
                   var(--bg-body);
       color: var(--gris-texto);
       min-height: 100vh;
-      min-height: 100dvh; /* dynamic viewport para celulares */
+      min-height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -87,378 +82,218 @@
       padding: 32px 24px 28px;
       animation: fadeSlideUp .45s cubic-bezier(.22,.68,0,1.2) both;
     }
-    .login-card.saliendo {
-      animation: fadeSlideOut .3s ease forwards;
-      pointer-events: none;
-    }
-    .login-header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
+    .login-card.saliendo { animation: fadeSlideOut .3s ease forwards; pointer-events: none; }
+    .login-header { text-align: center; margin-bottom: 28px; }
     .login-logo {
-      width: 68px;
-      height: 68px;
-      border-radius: 16px;
-      background: #fff;
-      border: 2px solid var(--verde);
+      width: 68px; height: 68px; border-radius: 16px;
+      background: #fff; border: 2px solid var(--verde);
       box-shadow: 0 12px 24px rgba(22,163,74,0.28);
-      object-fit: contain;
-      margin: 0 auto 14px;
-      padding: 6px;
-      display: block;
-      animation: pulse-logo 2.4s ease-in-out infinite;
+      object-fit: contain; margin: 0 auto 14px; padding: 6px;
+      display: block; animation: pulse-logo 2.4s ease-in-out infinite;
     }
-    .login-titulo {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--gris-texto);
-      line-height: 1.3;
-    }
-    .login-sub {
-      font-size: .85rem;
-      color: var(--gris-suave);
-      line-height: 1.4;
-      margin-top: 4px;
-    }
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .form-label {
-      font-size: .95rem;
-      font-weight: 600;
-      color: var(--gris-texto);
-    }
+    .login-titulo { font-size: 1.1rem; font-weight: 700; color: var(--gris-texto); line-height: 1.3; }
+    .login-sub { font-size: .85rem; color: var(--gris-suave); line-height: 1.4; margin-top: 4px; }
+    .form-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .form-label { font-size: .95rem; font-weight: 600; color: var(--gris-texto); }
     .form-input {
-      font-family: inherit;
-      font-size: 1.1rem; /* más grande para celular */
-      border-radius: 12px;
-      border: 1.5px solid var(--borde);
-      padding: 14px 16px;
-      outline: none;
-      line-height: 1.4;
-      background: #fff;
-      color: var(--gris-texto);
-      transition: all .2s ease;
-      /* evita zoom en iOS al enfocar */
-      -webkit-text-size-adjust: 100%;
+      font-family: inherit; font-size: 1.1rem; border-radius: 12px;
+      border: 1.5px solid var(--borde); padding: 14px 16px; outline: none;
+      line-height: 1.4; background: #fff; color: var(--gris-texto);
+      transition: all .2s ease; -webkit-text-size-adjust: 100%;
     }
-    .form-input:focus {
-      border-color: rgba(22,163,74,.6);
-      box-shadow: 0 0 0 3px rgba(22,163,74,.2);
-    }
+    .form-input:focus { border-color: rgba(22,163,74,.6); box-shadow: 0 0 0 3px rgba(22,163,74,.2); }
     .form-input.error-shake {
-      border-color: #dc2626;
-      box-shadow: 0 0 0 3px rgba(220,38,38,.15);
+      border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,.15);
       animation: shake .4s ease;
     }
-    .error-msg {
-      font-size: .85rem;
-      line-height: 1.3;
-      color: #dc2626;
-      min-height: 1.2em;
-    }
+    .error-msg { font-size: .85rem; line-height: 1.3; color: #dc2626; min-height: 1.2em; }
     .btn-submit {
-      width: 100%;
-      background: var(--verde);
-      color: #fff;
-      font-weight: 700;
-      border: 0;
-      border-radius: 14px;
-      padding: 16px; /* más alto para el dedo */
-      font-size: 1.05rem;
-      cursor: pointer;
-      box-shadow: 0 16px 28px rgba(22,163,74,.38);
+      width: 100%; background: var(--verde); color: #fff; font-weight: 700;
+      border: 0; border-radius: 14px; padding: 16px; font-size: 1.05rem;
+      cursor: pointer; box-shadow: 0 16px 28px rgba(22,163,74,.38);
       transition: background .15s ease, transform .1s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      /* área táctil mínima recomendada */
-      min-height: 52px;
-      touch-action: manipulation;
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; min-height: 52px; touch-action: manipulation;
     }
     .btn-submit:active { transform: scale(.97); background: var(--verde-oscuro); }
     .btn-spinner {
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255,255,255,.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .6s linear infinite;
-      display: none;
+      width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin .6s linear infinite; display: none;
     }
     .btn-submit.cargando .btn-spinner { display: block; }
     .btn-submit.cargando .btn-texto   { opacity: .7; }
     .nota-legal {
-      text-align: center;
-      font-size: .75rem;
-      color: var(--gris-suave);
-      line-height: 1.5;
-      margin-top: 18px;
+      text-align: center; font-size: .75rem; color: var(--gris-suave);
+      line-height: 1.5; margin-top: 18px;
     }
 
     /* ============================================
        BILLETERA CARD
     ============================================ */
     .billetera-card {
-      background: var(--bg-card);
-      border: 1px solid var(--borde);
+      background: var(--bg-card); border: 1px solid var(--borde);
       border-radius: 24px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.05);
-      width: 100%;
-      max-width: 1100px;
-      padding: 20px 16px 24px;
-      display: none;
+      width: 100%; max-width: 1100px; padding: 20px 16px 24px; display: none;
     }
     .billetera-card.visible {
       display: block;
       animation: fadeSlideUp .5s cubic-bezier(.22,.68,0,1.2) both;
     }
-    .billetera-card.saliendo {
-      animation: fadeSlideOut .3s ease forwards;
-      pointer-events: none;
-    }
+    .billetera-card.saliendo { animation: fadeSlideOut .3s ease forwards; pointer-events: none; }
 
-    /* Header billetera */
+    /* Header */
     .billetera-head {
-      text-align: center;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--borde);
+      text-align: center; margin-bottom: 20px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--borde);
     }
-    .billetera-titulo {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--gris-texto);
-      line-height: 1.2;
+    .billetera-titulo { font-size: 1.3rem; font-weight: 700; color: var(--gris-texto); line-height: 1.2; }
+
+    /* Info pills */
+    .info-pills {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 8px; margin-top: 10px;
     }
-    .billetera-nombre {
-      font-size: .85rem;
-      font-weight: 500;
-      color: var(--gris-suave);
-      margin-top: 4px;
+    .info-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #f1f5f9; border: 1px solid var(--borde);
+      border-radius: 100px; padding: 4px 12px;
+      font-size: .78rem; font-weight: 500; color: #475569;
     }
+    .info-pill strong { color: var(--gris-texto); }
 
     /* Badge saldo */
     .saldo-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 10px;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 100px;
-      padding: 6px 14px;
-      font-size: .85rem;
-      font-weight: 600;
-      color: var(--verde-oscuro);
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 10px; background: #f0fdf4; border: 1px solid #bbf7d0;
+      border-radius: 100px; padding: 6px 14px;
+      font-size: .85rem; font-weight: 600; color: var(--verde-oscuro);
     }
-    .saldo-badge.negativo {
-      background: #fef2f2;
-      border-color: #fecaca;
-      color: #991b1b;
-    }
-    .saldo-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--verde);
-    }
-    .saldo-badge.negativo .saldo-dot {
-      background: #dc2626;
-    }
+    .saldo-badge.negativo { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+    .saldo-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--verde); }
+    .saldo-badge.negativo .saldo-dot { background: #dc2626; }
 
     /* ============================================
-       TABLA — scroll horizontal en mobile
+       TABLA
     ============================================ */
-    .tabla-scroll-wrapper {
-      overflow-x: auto;
-      border-radius: 12px;
-      border: 1px solid #cbd5e1;
-      /* scroll suave en iOS */
-      -webkit-overflow-scrolling: touch;
-      /* indicador visual de scroll */
-      scroll-snap-type: x proximity;
-    }
-
-    /* Hint de scroll solo en mobile */
     .scroll-hint {
-      display: none;
-      text-align: center;
-      font-size: .72rem;
-      color: var(--gris-suave);
-      margin-bottom: 6px;
+      display: none; text-align: center; font-size: .72rem;
+      color: var(--gris-suave); margin-bottom: 6px;
+    }
+    .tabla-scroll-wrapper {
+      overflow-x: auto; border-radius: 12px; border: 1px solid #cbd5e1;
+      -webkit-overflow-scrolling: touch;
     }
 
     table {
-      border-collapse: collapse;
-      width: 100%;
-      min-width: 720px;
-      font-size: .78rem;
-      text-align: center;
-      table-layout: fixed;
+      border-collapse: collapse; width: 100%;
+      font-size: .78rem; text-align: center; table-layout: auto;
     }
     thead th {
-      border: 1px solid #cbd5e1;
-      padding: 8px 4px;
-      font-weight: 700;
-      background: #f1f5f9;
-      font-size: .72rem;
-      letter-spacing: .02em;
-      color: #475569;
+      border: 1px solid #cbd5e1; padding: 8px 6px;
+      font-weight: 700; background: #f1f5f9;
+      font-size: .72rem; letter-spacing: .02em; color: #475569;
+      white-space: nowrap;
     }
-    thead th:first-child {
-      background: #e2e8f0;
-    }
-    /* Columna TOTAL destacada */
-    thead th:last-child,
-    tbody td:last-child {
+    thead th:first-child { background: #e2e8f0; }
+
+    /* Columna TOTAL SALDO */
+    thead th.col-total,
+    tbody td.col-total {
       background: #f0fdf4 !important;
-      font-weight: 700;
       border-left: 2px solid #86efac !important;
+      font-weight: 700;
+    }
+
+    /* Separador visual entre meses y seguro */
+    thead th.sep-seguro,
+    tbody td.sep-seguro {
+      background: #f8fafc !important;
+      border-left: 3px solid #cbd5e1 !important;
+    }
+
+    /* Fila seguro */
+    tbody tr.fila-seguro td {
+      background: #fff7ed !important;
+      border-top: 2px solid #fed7aa !important;
+    }
+    tbody tr.fila-seguro td.row-title {
+      background: #ffedd5 !important;
+      color: #9a3412;
+      font-weight: 700;
+    }
+    td.seguro-deuda {
+      color: #dc2626 !important;
+      font-weight: 700 !important;
+    }
+    td.seguro-ok {
+      color: var(--verde) !important;
+      font-weight: 700 !important;
     }
 
     tbody td {
-      border: 1px solid #cbd5e1;
-      padding: 10px 4px;
-      font-weight: 500;
-      height: 42px;
-      vertical-align: middle;
-      background: #fff;
-      transition: background .15s ease;
+      border: 1px solid #cbd5e1; padding: 10px 6px;
+      font-weight: 500; height: 42px; vertical-align: middle;
+      background: #fff; transition: background .15s ease;
+      white-space: nowrap;
     }
     tbody tr:nth-child(1) { animation: rowIn .4s .15s ease both; }
     tbody tr:nth-child(2) { animation: rowIn .4s .28s ease both; }
     tbody tr:nth-child(3) { animation: rowIn .4s .41s ease both; }
+    tbody tr:nth-child(4) { animation: rowIn .4s .54s ease both; }
 
-    /* Fila TOTAL (tercera fila) */
-    tbody tr:nth-child(3) td {
-      background: #f8fafc;
-      font-weight: 700;
+    /* Fila TOTAL */
+    tbody tr.fila-total td {
+      background: #f8fafc; font-weight: 700;
       border-top: 2px solid #94a3b8;
     }
 
     tbody td.row-title {
-      font-size: .75rem;
-      font-weight: 700;
-      background: #f1f5f9;
-      width: 80px;
-      text-align: left;
-      padding-left: 8px;
-      white-space: nowrap;
-      color: #334155;
-      letter-spacing: .03em;
+      font-size: .75rem; font-weight: 700; background: #f1f5f9;
+      text-align: left; padding-left: 8px; white-space: nowrap;
+      color: #334155; letter-spacing: .03em; min-width: 90px;
     }
     td.has-value { animation: cellPop .3s ease; }
-    tbody td:not(.row-title):hover {
-      background: #f0fdf4;
+    tbody td:not(.row-title):hover { background: #f0fdf4; }
+
+    /* Celdas ocultas (meses futuros) */
+    td.mes-futuro {
+      background: #f8fafc !important;
+      color: #cbd5e1 !important;
+      font-size: .65rem;
+      cursor: not-allowed;
     }
 
     .tabla-nota {
-      font-size: .7rem;
-      line-height: 1.5;
-      color: var(--gris-suave);
-      text-align: center;
-      margin-top: 10px;
+      font-size: .7rem; line-height: 1.5; color: var(--gris-suave);
+      text-align: center; margin-top: 10px;
     }
 
-    /* ============================================
-       BOTÓN SALIR
-    ============================================ */
-    .volver-wrapper {
-      margin-top: 20px;
-      text-align: center;
-    }
+    /* Botón salir */
+    .volver-wrapper { margin-top: 20px; text-align: center; }
     .btn-volver {
-      appearance: none;
-      background: transparent;
-      border: 2px solid var(--verde);
-      color: var(--verde-oscuro);
-      font-weight: 700;
-      font-size: .95rem;
-      border-radius: 12px;
-      padding: 12px 28px;
-      cursor: pointer;
-      transition: all .15s ease;
-      min-height: 48px;
-      touch-action: manipulation;
+      appearance: none; background: transparent;
+      border: 2px solid var(--verde); color: var(--verde-oscuro);
+      font-weight: 700; font-size: .95rem; border-radius: 12px;
+      padding: 12px 28px; cursor: pointer; transition: all .15s ease;
+      min-height: 48px; touch-action: manipulation;
     }
-    .btn-volver:active {
-      background: var(--verde);
-      color: #fff;
-      transform: scale(.97);
-    }
+    .btn-volver:active { background: var(--verde); color: #fff; transform: scale(.97); }
 
     /* ============================================
-       RESPONSIVE — mejoras para celular
+       MOBILE
     ============================================ */
     @media (max-width: 600px) {
-      body {
-        padding: 12px;
-        align-items: flex-start;
-        padding-top: 24px;
-      }
-
-      .login-card {
-        border-radius: 20px;
-        padding: 28px 20px 24px;
-      }
-
-      .billetera-card {
-        border-radius: 20px;
-        padding: 16px 12px 20px;
-      }
-
-      .billetera-titulo {
-        font-size: 1.1rem;
-      }
-
-      /* Mostrar hint de scroll en mobile */
-      .scroll-hint {
-        display: block;
-      }
-
-      /* Tabla más compacta en mobile */
-      table {
-        font-size: .7rem;
-        min-width: 600px;
-      }
-      thead th {
-        padding: 6px 2px;
-        font-size: .65rem;
-      }
-      tbody td {
-        padding: 8px 2px;
-        height: 38px;
-      }
-      tbody td.row-title {
-        width: 68px;
-        font-size: .68rem;
-        padding-left: 5px;
-      }
-
-      .btn-submit {
-        padding: 16px;
-        font-size: 1rem;
-      }
-
-      .btn-volver {
-        width: 100%;
-        text-align: center;
-      }
-
-      .saldo-badge {
-        font-size: .8rem;
-      }
-    }
-
-    @media (max-width: 380px) {
-      table { min-width: 520px; }
-      thead th { font-size: .6rem; }
-      tbody td.row-title { width: 60px; font-size: .62rem; }
+      body { padding: 12px; align-items: flex-start; padding-top: 24px; }
+      .billetera-card { border-radius: 20px; padding: 16px 12px 20px; }
+      .billetera-titulo { font-size: 1.05rem; }
+      .scroll-hint { display: block; }
+      table { font-size: .68rem; }
+      thead th { padding: 6px 3px; font-size: .62rem; }
+      tbody td { padding: 8px 3px; height: 36px; }
+      tbody td.row-title { min-width: 75px; font-size: .65rem; padding-left: 5px; }
+      .btn-volver { width: 100%; }
     }
   </style>
 </head>
@@ -474,13 +309,9 @@
     <form id="login-form">
       <div class="form-field">
         <label class="form-label" for="dni">Ingresá tu DNI</label>
-        <input
-          id="dni" name="dni" class="form-input"
-          placeholder="Ej: 40123456"
-          autocomplete="off"
-          inputmode="numeric"
-          pattern="[0-9]*"
-        />
+        <input id="dni" name="dni" class="form-input"
+          placeholder="Ej: 40123456" autocomplete="off"
+          inputmode="numeric" pattern="[0-9]*" />
       </div>
       <div class="error-msg" id="error-msg"></div>
       <button type="submit" class="btn-submit" id="btn-ingresar">
@@ -497,11 +328,16 @@
   <!-- BILLETERA -->
   <div class="billetera-card" id="billetera-card">
     <div class="billetera-head">
-      <div class="billetera-titulo" id="billetera-titulo">BILLETERA DE (NOMBRE)</div>
-      <div class="billetera-nombre" id="billetera-detalle">DNI: ----</div>
+      <div class="billetera-titulo" id="billetera-titulo">BILLETERA</div>
+      <div class="info-pills">
+        <span class="info-pill">DNI: <strong id="info-dni">—</strong></span>
+        <span class="info-pill">FdN: <strong id="info-fdn">—</strong></span>
+        <span class="info-pill">Grupo: <strong id="info-grupo">—</strong></span>
+        <span class="info-pill">Saldo inicial: <strong id="info-saldo-ini">$0,00</strong></span>
+      </div>
       <div class="saldo-badge" id="saldo-badge">
         <span class="saldo-dot"></span>
-        <span id="saldo-texto">Saldo: $0</span>
+        <span id="saldo-texto">Saldo total: $0</span>
       </div>
     </div>
 
@@ -510,63 +346,12 @@
     <div class="tabla-scroll-wrapper">
       <table id="billetera-tabla">
         <thead>
-          <tr>
-            <th></th>
-            <th>ENE</th><th>FEB</th><th>MAR</th><th>ABR</th>
-            <th>MAY</th><th>JUN</th><th>JUL</th><th>AGO</th>
-            <th>SEP</th><th>OCT</th><th>NOV</th><th>DIC</th>
-            <th>TOTAL</th>
+          <tr id="thead-row">
+            <!-- Se genera dinámicamente con JS -->
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td class="row-title">ENTRADAS</td>
-            <td data-row="entradas" data-mes="enero"></td>
-            <td data-row="entradas" data-mes="febrero"></td>
-            <td data-row="entradas" data-mes="marzo"></td>
-            <td data-row="entradas" data-mes="abril"></td>
-            <td data-row="entradas" data-mes="mayo"></td>
-            <td data-row="entradas" data-mes="junio"></td>
-            <td data-row="entradas" data-mes="julio"></td>
-            <td data-row="entradas" data-mes="agosto"></td>
-            <td data-row="entradas" data-mes="septiembre"></td>
-            <td data-row="entradas" data-mes="octubre"></td>
-            <td data-row="entradas" data-mes="noviembre"></td>
-            <td data-row="entradas" data-mes="diciembre"></td>
-            <td data-row="entradas" data-mes="total" id="total-entradas"></td>
-          </tr>
-          <tr>
-            <td class="row-title">SALIDAS</td>
-            <td data-row="salidas" data-mes="enero"></td>
-            <td data-row="salidas" data-mes="febrero"></td>
-            <td data-row="salidas" data-mes="marzo"></td>
-            <td data-row="salidas" data-mes="abril"></td>
-            <td data-row="salidas" data-mes="mayo"></td>
-            <td data-row="salidas" data-mes="junio"></td>
-            <td data-row="salidas" data-mes="julio"></td>
-            <td data-row="salidas" data-mes="agosto"></td>
-            <td data-row="salidas" data-mes="septiembre"></td>
-            <td data-row="salidas" data-mes="octubre"></td>
-            <td data-row="salidas" data-mes="noviembre"></td>
-            <td data-row="salidas" data-mes="diciembre"></td>
-            <td data-row="salidas" data-mes="total" id="total-salidas"></td>
-          </tr>
-          <tr>
-            <td class="row-title">TOTAL</td>
-            <td data-row="total" data-mes="enero"></td>
-            <td data-row="total" data-mes="febrero"></td>
-            <td data-row="total" data-mes="marzo"></td>
-            <td data-row="total" data-mes="abril"></td>
-            <td data-row="total" data-mes="mayo"></td>
-            <td data-row="total" data-mes="junio"></td>
-            <td data-row="total" data-mes="julio"></td>
-            <td data-row="total" data-mes="agosto"></td>
-            <td data-row="total" data-mes="septiembre"></td>
-            <td data-row="total" data-mes="octubre"></td>
-            <td data-row="total" data-mes="noviembre"></td>
-            <td data-row="total" data-mes="diciembre"></td>
-            <td data-row="total" data-mes="total" id="total-neto"></td>
-          </tr>
+        <tbody id="tbody">
+          <!-- Se genera dinámicamente con JS -->
         </tbody>
       </table>
     </div>
@@ -582,13 +367,25 @@
 
   <script>
     // =====================================================
-    // 🔧 CONFIGURACIÓN — reemplazá con tus datos reales
+    // 🔧 CONFIGURACIÓN
     // =====================================================
     const SUPABASE_URL = "https://wikzronmuohcirrqxeks.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indpa3pyb25tdW9oY2lycnF4ZWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3OTI0NTcsImV4cCI6MjA4NzM2ODQ1N30.AV9P0w4ZnRWmlo88C3ErSgh-o0E_x3u1jSMaROSk14k";
 
     const { createClient } = supabase;
     const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const MESES = [
+      "enero","febrero","marzo","abril","mayo","junio",
+      "julio","agosto","septiembre","octubre","noviembre","diciembre"
+    ];
+    const MESES_CORTO = [
+      "ENE","FEB","MAR","ABR","MAY","JUN",
+      "JUL","AGO","SEP","OCT","NOV","DIC"
+    ];
+
+    // Mes actual (0 = enero, 11 = diciembre)
+    const MES_ACTUAL = new Date().getMonth();
 
     // Referencias DOM
     const loginCard     = document.getElementById("login-card");
@@ -597,83 +394,146 @@
     const dniInput      = document.getElementById("dni");
     const errorMsg      = document.getElementById("error-msg");
     const tituloEl      = document.getElementById("billetera-titulo");
-    const detalleEl     = document.getElementById("billetera-detalle");
+    const infoDni       = document.getElementById("info-dni");
+    const infoFdn       = document.getElementById("info-fdn");
+    const infoGrupo     = document.getElementById("info-grupo");
     const saldoBadge    = document.getElementById("saldo-badge");
     const saldoTexto    = document.getElementById("saldo-texto");
+    const infoSaldoIni  = document.getElementById("info-saldo-ini");
     const volverBtn     = document.getElementById("volver-btn");
     const btnIngresar   = document.getElementById("btn-ingresar");
+    const theadRow      = document.getElementById("thead-row");
+    const tbody         = document.getElementById("tbody");
 
-    const MESES = [
-      "enero","febrero","marzo","abril","mayo","junio",
-      "julio","agosto","septiembre","octubre","noviembre","diciembre"
-    ];
-
-    // Llenar tabla
-    function renderTabla(scout) {
-      let totalEntradas = 0;
-      let totalSalidas  = 0;
-
-      MESES.forEach((mes) => {
-        const entrada = scout[`entradas_${mes}`] || 0;
-        const salida  = scout[`salidas_${mes}`]  || 0;
-        const neto    = entrada - salida;
-        totalEntradas += entrada;
-        totalSalidas  += salida;
-
-        const celdas = {
-          entradas: billeteraCard.querySelector(`[data-row="entradas"][data-mes="${mes}"]`),
-          salidas:  billeteraCard.querySelector(`[data-row="salidas"][data-mes="${mes}"]`),
-          total:    billeteraCard.querySelector(`[data-row="total"][data-mes="${mes}"]`),
-        };
-
-        function poner(celda, valor) {
-          if (!celda) return;
-          celda.classList.remove("has-value");
-          void celda.offsetWidth;
-          if (valor === 0) {
-            celda.textContent = "";
-          } else {
-            celda.textContent = `$${valor.toLocaleString("es-AR")}`;
-            celda.classList.add("has-value");
-          }
-        }
-
-        poner(celdas.entradas, entrada);
-        poner(celdas.salidas,  salida);
-        poner(celdas.total,    neto);
-      });
-
-      // Totales anuales
-      const totalNeto = totalEntradas - totalSalidas;
-
-      function ponerTotal(celda, valor) {
-        if (!celda) return;
-        celda.textContent = `$${valor.toLocaleString("es-AR")}`;
-      }
-      ponerTotal(document.getElementById("total-entradas"), totalEntradas);
-      ponerTotal(document.getElementById("total-salidas"),  totalSalidas);
-      ponerTotal(document.getElementById("total-neto"),     totalNeto);
-
-      // Badge de saldo
-      saldoTexto.textContent = `Saldo: $${totalNeto.toLocaleString("es-AR")}`;
-      if (totalNeto < 0) {
-        saldoBadge.classList.add("negativo");
-      } else {
-        saldoBadge.classList.remove("negativo");
-      }
+    // =====================================================
+    // FORMATEO
+    // =====================================================
+    function fmt(valor) {
+      return `$${Number(valor).toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
-    // Transiciones
-    function mostrarBilletera(scout) {
+    // =====================================================
+    // CONSTRUIR TABLA DINÁMICAMENTE
+    // =====================================================
+    function construirTabla(scout, configSeguro) {
+      // Limpiar
+      theadRow.innerHTML = "";
+      tbody.innerHTML    = "";
+
+      // ── ENCABEZADO ──────────────────────────────────
+      // Columna vacía (nombre de fila)
+      theadRow.innerHTML += `<th></th>`;
+      // Solo meses hasta el actual (inclusive)
+      for (let i = 0; i <= MES_ACTUAL; i++) {
+        theadRow.innerHTML += `<th>${MESES_CORTO[i]}</th>`;
+      }
+      // Total saldo
+      theadRow.innerHTML += `<th class="col-total">TOTAL SALDO</th>`;
+
+      // ── CALCULAR VALORES ────────────────────────────
+      const saldoInicial = Number(scout.saldo_inicial) || 0;
+      let totalEntradas  = saldoInicial; // El saldo inicial suma a entradas
+      let totalSalidas   = 0;
+
+      // Arrays de valores por mes (solo hasta mes actual)
+      const entradasMes = [];
+      const salidasMes  = [];
+      const netoMes     = [];
+
+      for (let i = 0; i <= MES_ACTUAL; i++) {
+        const mes     = MESES[i];
+        const entrada = Number(scout[`entradas_${mes}`]) || 0;
+        const salida  = Number(scout[`salidas_${mes}`])  || 0;
+        entradasMes.push(entrada);
+        salidasMes.push(salida);
+        netoMes.push(entrada - salida);
+        totalEntradas += entrada;
+        totalSalidas  += salida;
+      }
+
+      const totalNeto = totalEntradas - totalSalidas;
+
+      // Mostrar saldo inicial en el pill del header
+      infoSaldoIni.textContent = fmt(saldoInicial);
+
+      // ── FILA ENTRADAS ────────────────────────────────
+      let trEnt = `<tr>`;
+      trEnt += `<td class="row-title">ENTRADAS</td>`;
+      for (let i = 0; i <= MES_ACTUAL; i++) {
+        const v = entradasMes[i];
+        trEnt += `<td${v > 0 ? ' class="has-value"' : ''}>${v > 0 ? fmt(v) : ''}</td>`;
+      }
+      trEnt += `<td class="col-total"></td>`;
+      trEnt += `</tr>`;
+
+      // ── FILA SALIDAS ─────────────────────────────────
+      let trSal = `<tr>`;
+      trSal += `<td class="row-title">SALIDAS</td>`;
+      for (let i = 0; i <= MES_ACTUAL; i++) {
+        const v = salidasMes[i];
+        trSal += `<td${v > 0 ? ' class="has-value"' : ''}>${v > 0 ? fmt(v) : ''}</td>`;
+      }
+      trSal += `<td class="col-total"></td>`;
+      trSal += `</tr>`;
+
+      // ── FILA TOTAL ───────────────────────────────────
+      let trTot = `<tr class="fila-total">`;
+      trTot += `<td class="row-title">TOTAL</td>`;
+      for (let i = 0; i <= MES_ACTUAL; i++) {
+        const v = netoMes[i];
+        const cls = v < 0 ? ' style="color:#dc2626"' : (v > 0 ? ' style="color:#16a34a"' : '');
+        trTot += `<td${cls}>${v !== 0 ? fmt(v) : ''}</td>`;
+      }
+      trTot += `<td class="col-total" style="color:${totalNeto >= 0 ? '#16a34a' : '#dc2626'}">${fmt(totalNeto)}</td>`;
+      trTot += `</tr>`;
+
+      // ── FILA PAGO DE SEGURO ──────────────────────────
+      // Calcular deuda: suma del seguro de cada mes hasta el actual
+      let deudaSeguro = 0;
+      for (let i = 0; i <= MES_ACTUAL; i++) {
+        const clave = `seguro_${MESES[i]}`;
+        deudaSeguro += Number(configSeguro[clave]) || 0;
+      }
+      const seguroPagado = scout.seguro_pagado === true;
+      const montoSeguro  = seguroPagado ? 0 : deudaSeguro;
+
+      let trSeg = `<tr class="fila-seguro">`;
+      trSeg += `<td class="row-title">PAGO DE SEGURO</td>`;
+      // Celdas de meses vacías para el seguro
+      for (let i = 0; i <= MES_ACTUAL; i++) {
+        trSeg += `<td></td>`;
+      }
+      // Total seguro
+      const clsSeguro = seguroPagado ? 'seguro-ok' : 'seguro-deuda';
+      trSeg += `<td class="col-total ${clsSeguro}">${fmt(montoSeguro)}</td>`;
+      trSeg += `</tr>`;
+
+      // Insertar filas
+      tbody.innerHTML = trEnt + trSal + trTot + trSeg;
+
+      // ── BADGE SALDO ──────────────────────────────────
+      saldoTexto.textContent = `Saldo total: ${fmt(totalNeto)}`;
+      saldoBadge.classList.toggle("negativo", totalNeto < 0);
+    }
+
+    // =====================================================
+    // TRANSICIONES
+    // =====================================================
+    function mostrarBilletera(scout, configSeguro) {
       loginCard.classList.add("saliendo");
       setTimeout(() => {
         loginCard.style.display = "none";
         loginCard.classList.remove("saliendo");
-        tituloEl.textContent  = `BILLETERA DE ${scout.nombre.toUpperCase()}`;
-        detalleEl.textContent = `DNI: ${scout.dni}`;
-        renderTabla(scout);
+
+        tituloEl.textContent    = `BILLETERA DE ${scout.nombre.toUpperCase()}`;
+        infoDni.textContent     = scout.dni;
+        infoFdn.textContent     = scout.fecha_nacimiento || "—";
+        infoGrupo.textContent   = scout.grupo || "—";
+        infoSaldoIni.textContent = fmt(Number(scout.saldo_inicial) || 0);
+
+        construirTabla(scout, configSeguro);
+
         billeteraCard.classList.add("visible");
-        // scroll al inicio
         window.scrollTo({ top: 0, behavior: "smooth" });
       }, 300);
     }
@@ -693,44 +553,46 @@
       }, 300);
     }
 
-    // Error con sacudida
+    // =====================================================
+    // ERROR
+    // =====================================================
     function mostrarError(msg) {
       errorMsg.textContent = msg;
       dniInput.classList.remove("error-shake");
       void dniInput.offsetWidth;
       dniInput.classList.add("error-shake");
     }
-    dniInput.addEventListener("animationend", () => {
-      dniInput.classList.remove("error-shake");
-    });
+    dniInput.addEventListener("animationend", () => dniInput.classList.remove("error-shake"));
 
-    // Login
+    // =====================================================
+    // LOGIN
+    // =====================================================
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const dniValor = dniInput.value.trim();
-
-      if (!dniValor) {
-        mostrarError("Ingresá tu DNI.");
-        return;
-      }
+      if (!dniValor) { mostrarError("Ingresá tu DNI."); return; }
 
       btnIngresar.classList.add("cargando");
       btnIngresar.disabled = true;
       errorMsg.textContent = "";
 
       try {
-        const { data, error } = await db
-          .from("scouts")
-          .select("*")
-          .eq("dni", dniValor)
-          .single();
+        // Consultar scout y config en paralelo
+        const [{ data: scout, error: errScout }, { data: configRows, error: errConfig }] = await Promise.all([
+          db.from("scouts").select("*").eq("dni", dniValor).single(),
+          db.from("config").select("*")
+        ]);
 
-        if (error || !data) {
+        if (errScout || !scout) {
           mostrarError("DNI no encontrado. Hablá con tu Jefe de Rama.");
           return;
         }
 
-        mostrarBilletera(data);
+        // Convertir config a objeto { clave: valor }
+        const configSeguro = {};
+        (configRows || []).forEach(r => { configSeguro[r.clave] = r.valor; });
+
+        mostrarBilletera(scout, configSeguro);
 
       } catch (err) {
         mostrarError("Error de conexión. Intentá de nuevo.");
@@ -741,10 +603,10 @@
       }
     });
 
-    // Salir
-    volverBtn.addEventListener("click", () => {
-      mostrarLogin();
-    });
+    // =====================================================
+    // SALIR
+    // =====================================================
+    volverBtn.addEventListener("click", () => mostrarLogin());
   </script>
 </body>
 </html>
