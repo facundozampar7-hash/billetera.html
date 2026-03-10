@@ -57,6 +57,32 @@
     .section-subtitle { margin-top: 12px; text-align: center; font-size: 0.9rem; font-weight: 500; color: #166534; letter-spacing: -0.02em; }
     .section-text { color: #022c22; font-size: 1rem; line-height: 1.6; margin-top: 16px; text-align: center; }
     .narrow p + p { margin-top: 12px; }
+
+    /* BLOQUE OBJETIVO */
+    .objetivo-banner {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(22,163,74,0.3);
+      border-left: 4px solid var(--verde);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 36px;
+      box-shadow: 0 8px 24px rgba(22,101,52,0.10);
+    }
+    .objetivo-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--verde);
+      margin-bottom: 8px;
+    }
+    .objetivo-text {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: #1a3a2a;
+      text-align: left;
+    }
+
     .cards-flex { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; margin-top: 40px; }
     .act-card { background: rgba(254, 254, 254, 0.96); border-radius: 16px; border: 1px solid rgba(22,163,74,0.2); box-shadow: 0 20px 40px rgba(22,101,52,0.15); padding: 20px; min-width: 260px; max-width: 340px; flex: 1; }
     .tag { display: inline-block; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 4px 10px; border: 1px solid transparent; width: fit-content; }
@@ -70,22 +96,7 @@
     .ramas-wrapper { display: grid; gap: 24px; margin-top: 40px; }
     @media (min-width: 768px) { .ramas-wrapper { grid-template-columns: repeat(4, 1fr); } }
     .rama-card { background: rgba(254, 254, 254, 0.96); border-radius: 16px; border: 1px solid rgba(34,197,94,0.25); box-shadow: 0 16px 30px rgba(22,101,52,0.16); padding: 20px; text-align: center; min-width: 200px; }
-
-    /* ETIQUETA DE SECCIÓN */
-    .rama-seccion-label {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      background: rgba(22, 163, 74, 0.12);
-      border: 1px solid rgba(22, 163, 74, 0.35);
-      color: #065f46;
-      border-radius: 999px;
-      padding: 3px 10px;
-      margin-bottom: 10px;
-    }
-
+    .rama-seccion-label { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; background: rgba(22, 163, 74, 0.12); border: 1px solid rgba(22, 163, 74, 0.35); color: #065f46; border-radius: 999px; padding: 3px 10px; margin-bottom: 10px; }
     .rama-nombre { font-size: 15px; font-weight: 600; color: #064e3b; line-height: 1.3; }
     .rama-edad { font-size: 13px; font-weight: 500; color: #166534; margin-top: 4px; line-height: 1.4; }
     .rama-desc { font-size: 13px; line-height: 1.4; color: #475569; margin-top: 8px; }
@@ -117,7 +128,6 @@
     .footer-links { list-style: none; line-height: 1.5; padding-left: 0; }
     .footer-links a { color: #a7f3d0; text-decoration: none; }
     .footer-links a:hover { color: #ecfdf3; }
-    .footer-bottom { border-top: 1px solid rgba(167,243,208,0.3); color: #6ee7b7; font-size: 11px; text-align: center; padding: 16px 0 24px; }
     .footer-quote { font-size: 12px; color: #a7f3d0; margin-top: 8px; line-height: 1.4; max-width: 260px; }
     #about { background: linear-gradient(135deg, #ecfdf3, #dcfce7); }
     #actividades { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
@@ -197,9 +207,12 @@
 
   <section id="about" class="section">
     <div class="container narrow">
+
+
       <h2 class="section-title">¿Quiénes somos?</h2>
       <div class="section-subtitle">Fe, servicio, naturaleza y comunidad</div>
-      <p class="section-text">Somos un grupo scout católico que acompaña el crecimiento de niños, jóvenes y adultos a través del juego, la vida al aire libre, el servicio comunitario y la fe.</p>
+      <p class="section-text">Somos un grupo scout católico que acompaña el crecimiento de niños, jóvenes y adultos mediante la aplicacion del Metodo Scout ideado por Lord Robert Baden Powell of Gilwell, de conformidad con la Ley Scout, los principios de amor a Dios, a la Patria y al hogar, segun la enseñanza y vida de la Iglesia Catolica Apostolica Romana y las pautas generales del Movimiento Scout Mundial.</p>
+      <p class="section-text">Lo aplicamos en el juego, la vida al aire libre, el servicio comunitario y la Fe.</p>
       <p class="section-text">Nuestra misión es educar para la vida: carácter, responsabilidad, trabajo en equipo y espíritu solidario.</p>
       <p class="section-text">Trabajamos para dejar el mundo mejor de cómo lo encontramos.</p>
     </div>
@@ -229,42 +242,35 @@
     </div>
   </section>
 
-  <!-- RAMAS / EDADES -->
   <section id="ramas" class="section">
     <div class="container narrow">
       <h2 class="section-title">Nuestras ramas</h2>
       <div class="section-subtitle">Cada edad vive el escultismo a su manera</div>
-
       <div class="ramas-wrapper">
-
         <div class="rama-card">
           <div class="rama-seccion-label">Sección Menor</div>
           <div class="rama-nombre">Lobato / Arco Iris</div>
           <div class="rama-edad">7 a 11 / 7 a 10 años</div>
           <div class="rama-desc">Aprenden jugando, explorando. El sistema pedagógico se concibe como de familia Feliz</div>
         </div>
-
         <div class="rama-card">
           <div class="rama-seccion-label">Sección Scout</div>
           <div class="rama-nombre">Tropa / Comunidad</div>
           <div class="rama-edad">11 a 14 / 10 a 13 años</div>
           <div class="rama-desc">La patrulla es la unidad metodológica que fundamenta el sistema pedagógico. Campamentos, desafíos, servicio. Empiezan a asumir responsabilidad personal.</div>
         </div>
-
         <div class="rama-card">
           <div class="rama-seccion-label">Sección Raider</div>
           <div class="rama-nombre">Tropa / Comunidad</div>
           <div class="rama-edad">14 a 17 / 13 a 16 años</div>
           <div class="rama-desc">Proyecto personal, construcción comunitaria, primeras experiencias de liderazgo.</div>
         </div>
-
         <div class="rama-card">
           <div class="rama-seccion-label">Sección Rover</div>
           <div class="rama-nombre">Clan / Comunidad</div>
           <div class="rama-edad">17 a 21 / 16 a 21 años</div>
           <div class="rama-desc">Servicio a la comunidad, trabajo en equipo. Compromiso de vida.</div>
         </div>
-
       </div>
     </div>
   </section>
@@ -324,7 +330,7 @@
           <p class="info-label">¿Quién puede sumarse?</p>
           <p class="info-value">Niños, adolescentes y jóvenes. También estamos abiertos a familias que quieran acompañar.</p>
           <p class="info-label">¿Necesito uniforme?</p>
-          <p class="info-value">No para la primera visita. Podés venir con ropa cómoda y ganas de participar</p>
+          <p class="info-value">No para la primera visita. Podés venir con ropa cómoda y ganas de participar 🙂</p>
           <p class="info-label">Importante</p>
           <p class="info-value">Somos un grupo de identidad católica. Compartimos espacios de fe y servicio comunitario.</p>
         </div>
