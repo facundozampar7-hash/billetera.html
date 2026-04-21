@@ -392,8 +392,8 @@
       "JUL","AGO","SEP","OCT","NOV","DIC"
     ];
 
-    // Mes actual (0 = enero, 11 = diciembre)
-    const MES_ACTUAL = new Date().getMonth();
+    // Mostrar siempre hasta mayo como mínimo (índice 4)
+    const MES_ACTUAL = Math.max(new Date().getMonth(), 4);
 
     // Referencias DOM
     const loginCard     = document.getElementById("login-card");
@@ -422,7 +422,7 @@
     // =====================================================
     // CONSTRUIR TABLA DINÁMICAMENTE
     // =====================================================
-    function construirTabla(scout, configSeguro) {
+    function construirTabla(scout) {
       // Limpiar
       theadRow.innerHTML = "";
       tbody.innerHTML    = "";
@@ -432,86 +432,65 @@
       let totalEntradas  = saldoInicial;
       let totalSalidas   = 0;
 
-      // Arrays de valores por mes (solo hasta mes actual)
+      // Arrays de valores por mes (todos hasta MES_ACTUAL)
       const entradasMes = [];
       const salidasMes  = [];
       const netoMes     = [];
-      const mesesConDatos = []; // solo índices de meses con algún valor
 
       for (let i = 0; i <= MES_ACTUAL; i++) {
         const mes     = MESES[i];
         const entrada = Number(scout[`entradas_${mes}`]) || 0;
         const salida  = Number(scout[`salidas_${mes}`])  || 0;
-        const seguro  = Number(configSeguro[`seguro_${mes}`]) || 0;
         entradasMes.push(entrada);
         salidasMes.push(salida);
         netoMes.push(entrada - salida);
         totalEntradas += entrada;
         totalSalidas  += salida;
-        if (entrada > 0 || salida > 0 || seguro > 0) {
-          mesesConDatos.push(i);
-        }
       }
 
       const totalNeto = totalEntradas - totalSalidas;
 
       // ── ENCABEZADO ──────────────────────────────────
       theadRow.innerHTML += `<th class="col-saldo-ini-header">Saldo inicial:<br>${fmt(saldoInicial)}</th>`;
-      // Solo meses con datos
-      for (const i of mesesConDatos) {
+      // Todos los meses hasta MES_ACTUAL
+      for (let i = 0; i <= MES_ACTUAL; i++) {
         theadRow.innerHTML += `<th>${MESES_CORTO[i]}</th>`;
       }
-      // Total saldo
       theadRow.innerHTML += `<th class="col-total">TOTAL SALDO</th>`;
 
       // ── FILA ENTRADAS ────────────────────────────────
-      let trEnt = `<tr>`;
-      trEnt += `<td class="row-title">ENTRADAS</td>`;
-      for (const i of mesesConDatos) {
+      let trEnt = `<tr><td class="row-title">ENTRADAS</td>`;
+      for (let i = 0; i <= MES_ACTUAL; i++) {
         const v = entradasMes[i];
         trEnt += `<td${v > 0 ? ' class="has-value"' : ''}>${v > 0 ? fmt(v) : ''}</td>`;
       }
-      trEnt += `<td class="col-total"></td>`;
-      trEnt += `</tr>`;
+      trEnt += `<td class="col-total"></td></tr>`;
 
       // ── FILA SALIDAS ─────────────────────────────────
-      let trSal = `<tr>`;
-      trSal += `<td class="row-title">SALIDAS</td>`;
-      for (const i of mesesConDatos) {
+      let trSal = `<tr><td class="row-title">SALIDAS</td>`;
+      for (let i = 0; i <= MES_ACTUAL; i++) {
         const v = salidasMes[i];
         trSal += `<td${v > 0 ? ' class="has-value"' : ''}>${v > 0 ? fmt(v) : ''}</td>`;
       }
-      trSal += `<td class="col-total"></td>`;
-      trSal += `</tr>`;
+      trSal += `<td class="col-total"></td></tr>`;
 
-      // ── FILA PAGO DE SEGURO ──────────────────────────
-      let deudaSeguro = 0;
-      const seguroPorMes = [];
+      // ── FILA PAGO DE SEGURO (desde columnas boolean del scout) ──
+      let trSeg = `<tr class="fila-seguro"><td class="row-title">PAGO DE SEGURO</td>`;
       for (let i = 0; i <= MES_ACTUAL; i++) {
-        const clave = `seguro_${MESES[i]}`;
-        const v = Number(configSeguro[clave]) || 0;
-        seguroPorMes.push(v);
-        deudaSeguro += v;
+        const mes    = MESES[i];
+        const pagado = scout[`seguro_${mes}`] === true;
+        if (pagado) {
+          trSeg += `<td class="seguro-ok">✓</td>`;
+        } else {
+          trSeg += `<td class="seguro-deuda">✗</td>`;
+        }
       }
-      const seguroPagado = scout.seguro_pagado === true;
-      const montoSeguro  = seguroPagado ? 0 : deudaSeguro;
+      trSeg += `<td class="col-total"></td></tr>`;
 
-      let trSeg = `<tr class="fila-seguro">`;
-      trSeg += `<td class="row-title">PAGO DE SEGURO</td>`;
-      for (const i of mesesConDatos) {
-        const v = seguroPorMes[i];
-        const cls = seguroPagado ? 'seguro-ok' : 'seguro-deuda';
-        trSeg += `<td class="${cls}">${v > 0 ? (seguroPagado ? fmt(0) : fmt(v)) : ''}</td>`;
-      }
-      const clsSeguro = seguroPagado ? 'seguro-ok' : 'seguro-deuda';
-      trSeg += `<td class="col-total ${clsSeguro}">${fmt(montoSeguro)}</td>`;
-      trSeg += `</tr>`;
-
-      // ── FILA TOTAL (entradas - salidas, sin seguro) ──
+      // ── FILA TOTAL ──
       const totalFinal = totalNeto;
-      let trTot = `<tr class="fila-total">`;
-      trTot += `<td class="row-title">TOTAL</td>`;
-      for (const i of mesesConDatos) {
+      let trTot = `<tr class="fila-total"><td class="row-title">TOTAL</td>`;
+      for (let i = 0; i <= MES_ACTUAL; i++) {
         const v = netoMes[i];
         const cls = v < 0 ? ' style="color:#dc2626"' : (v > 0 ? ' style="color:#16a34a"' : '');
         trTot += `<td${cls}>${v !== 0 ? fmt(v) : ''}</td>`;
@@ -530,7 +509,7 @@
     // =====================================================
     // TRANSICIONES
     // =====================================================
-    function mostrarBilletera(scout, configSeguro) {
+    function mostrarBilletera(scout) {
       loginCard.classList.add("saliendo");
       setTimeout(() => {
         loginCard.style.display = "none";
@@ -541,7 +520,7 @@
         infoFdn.textContent     = scout.fecha_nacimiento || "—";
         infoGrupo.textContent   = scout.grupo || "—";
 
-        construirTabla(scout, configSeguro);
+        construirTabla(scout);
 
         billeteraCard.classList.add("visible");
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -587,22 +566,14 @@
       errorMsg.textContent = "";
 
       try {
-        // Consultar scout y config en paralelo
-        const [{ data: scout, error: errScout }, { data: configRows, error: errConfig }] = await Promise.all([
-          db.from("scouts").select("*").eq("dni", dniValor).single(),
-          db.from("config").select("*")
-        ]);
+        const { data: scout, error: errScout } = await db.from("scouts").select("*").eq("dni", dniValor).single();
 
         if (errScout || !scout) {
           mostrarError("DNI no encontrado. Hablá con tu Jefe de Rama.");
           return;
         }
 
-        // Convertir config a objeto { clave: valor }
-        const configSeguro = {};
-        (configRows || []).forEach(r => { configSeguro[r.clave] = r.valor; });
-
-        mostrarBilletera(scout, configSeguro);
+        mostrarBilletera(scout);
 
       } catch (err) {
         mostrarError("Error de conexión. Intentá de nuevo.");
