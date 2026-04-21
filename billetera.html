@@ -392,7 +392,8 @@
       "JUL","AGO","SEP","OCT","NOV","DIC"
     ];
 
-    // Mostrar siempre hasta mayo como mínimo (índice 4)
+    // Mostrar siempre desde marzo (índice 2) hasta mayo como mínimo (índice 4)
+    const MES_INICIO = 2; // marzo
     const MES_ACTUAL = Math.max(new Date().getMonth(), 4);
 
     // Referencias DOM
@@ -432,12 +433,12 @@
       let totalEntradas  = saldoInicial;
       let totalSalidas   = 0;
 
-      // Arrays de valores por mes (todos hasta MES_ACTUAL)
+      // Arrays de valores por mes (desde marzo hasta MES_ACTUAL)
       const entradasMes = [];
       const salidasMes  = [];
       const netoMes     = [];
 
-      for (let i = 0; i <= MES_ACTUAL; i++) {
+      for (let i = MES_INICIO; i <= MES_ACTUAL; i++) {
         const mes     = MESES[i];
         const entrada = Number(scout[`entradas_${mes}`]) || 0;
         const salida  = Number(scout[`salidas_${mes}`])  || 0;
@@ -452,15 +453,14 @@
 
       // ── ENCABEZADO ──────────────────────────────────
       theadRow.innerHTML += `<th class="col-saldo-ini-header">Saldo inicial:<br>${fmt(saldoInicial)}</th>`;
-      // Todos los meses hasta MES_ACTUAL
-      for (let i = 0; i <= MES_ACTUAL; i++) {
+      for (let i = MES_INICIO; i <= MES_ACTUAL; i++) {
         theadRow.innerHTML += `<th>${MESES_CORTO[i]}</th>`;
       }
       theadRow.innerHTML += `<th class="col-total">TOTAL SALDO</th>`;
 
       // ── FILA ENTRADAS ────────────────────────────────
       let trEnt = `<tr><td class="row-title">ENTRADAS</td>`;
-      for (let i = 0; i <= MES_ACTUAL; i++) {
+      for (let i = 0; i < entradasMes.length; i++) {
         const v = entradasMes[i];
         trEnt += `<td${v > 0 ? ' class="has-value"' : ''}>${v > 0 ? fmt(v) : ''}</td>`;
       }
@@ -468,7 +468,7 @@
 
       // ── FILA SALIDAS ─────────────────────────────────
       let trSal = `<tr><td class="row-title">SALIDAS</td>`;
-      for (let i = 0; i <= MES_ACTUAL; i++) {
+      for (let i = 0; i < salidasMes.length; i++) {
         const v = salidasMes[i];
         trSal += `<td${v > 0 ? ' class="has-value"' : ''}>${v > 0 ? fmt(v) : ''}</td>`;
       }
@@ -476,21 +476,17 @@
 
       // ── FILA PAGO DE SEGURO (desde columnas boolean del scout) ──
       let trSeg = `<tr class="fila-seguro"><td class="row-title">PAGO DE SEGURO</td>`;
-      for (let i = 0; i <= MES_ACTUAL; i++) {
+      for (let i = MES_INICIO; i <= MES_ACTUAL; i++) {
         const mes    = MESES[i];
         const pagado = scout[`seguro_${mes}`] === true;
-        if (pagado) {
-          trSeg += `<td class="seguro-ok">✓</td>`;
-        } else {
-          trSeg += `<td class="seguro-deuda">✗</td>`;
-        }
+        trSeg += `<td class="${pagado ? 'seguro-ok' : 'seguro-deuda'}">${pagado ? '✓' : '✗'}</td>`;
       }
       trSeg += `<td class="col-total"></td></tr>`;
 
       // ── FILA TOTAL ──
       const totalFinal = totalNeto;
       let trTot = `<tr class="fila-total"><td class="row-title">TOTAL</td>`;
-      for (let i = 0; i <= MES_ACTUAL; i++) {
+      for (let i = 0; i < netoMes.length; i++) {
         const v = netoMes[i];
         const cls = v < 0 ? ' style="color:#dc2626"' : (v > 0 ? ' style="color:#16a34a"' : '');
         trTot += `<td${cls}>${v !== 0 ? fmt(v) : ''}</td>`;
