@@ -1,3 +1,15 @@
+// Animaciones de aparición lateral al hacer scroll
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
+
+document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+
 const slides = document.querySelectorAll(".foto-slide");
     let actualSlide = 0;
     slides.forEach((s, i) => s.classList.toggle("activa", i === 0));
