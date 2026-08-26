@@ -1,4 +1,25 @@
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; margin: 0; padding: 0; }
+
+    /* ===== Animaciones de aparición al hacer scroll ===== */
+    .reveal {
+      opacity: 0;
+      transition: opacity .8s cubic-bezier(.25,.46,.45,.94), transform .8s cubic-bezier(.25,.46,.45,.94);
+      will-change: opacity, transform;
+    }
+    .reveal-left  { transform: translateX(-70px); }
+    .reveal-right { transform: translateX(70px); }
+    .reveal-up    { transform: translateY(40px); }
+    .reveal.visible { opacity: 1; transform: translateX(0) translateY(0); }
+
+    /* Efecto escalonado para grupos de tarjetas (cards-flex, ramas-wrapper) */
+    .cards-flex .reveal:nth-child(1), .ramas-wrapper .reveal:nth-child(1) { transition-delay: 0s; }
+    .cards-flex .reveal:nth-child(2), .ramas-wrapper .reveal:nth-child(2) { transition-delay: .12s; }
+    .cards-flex .reveal:nth-child(3), .ramas-wrapper .reveal:nth-child(3) { transition-delay: .24s; }
+    .ramas-wrapper .reveal:nth-child(4) { transition-delay: .36s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
     :root { --verde: #16a34a; --verde-oscuro: #065f46; --texto-main: #022c22; --texto-sec: #475569; --borde-suave: #d1fae5; }
     body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", "Roboto", "Segoe UI", sans-serif; color: var(--texto-main); line-height: 1.4; background: radial-gradient(circle at top left, #bbf7d0 0, transparent 40%), radial-gradient(circle at bottom right, #bbf7d0 0, transparent 45%), #f0fdf4; }
     a { text-decoration: none; color: inherit; }
